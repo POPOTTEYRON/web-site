@@ -1,0 +1,31 @@
+{
+  "name": "ti-mango",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Site du restaurant Ti Mango (démonstration) — vitrine, carte et réservation en ligne.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch --env-file=.env src/server.js",
+    "db:migrate": "node --env-file=.env src/db/migrate.js",
+    "test": "node --env-file-if-exists=.env.test --test --test-concurrency=1 \"tests/unit/**/*.test.js\" \"tests/integration/**/*.test.js\""
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.2.2",
+    "connect-pg-simple": "^10.0.0",
+    "eta": "^4.6.0",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.3",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "nodemailer": "^10.4.0",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.2"
+  }
+}
