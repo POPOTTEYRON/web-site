@@ -133,10 +133,23 @@
       "phone": "Numéro de téléphone invalide.",
       "slot": "Choisissez une heure d'arrivée.",
       "consent": "Votre accord est nécessaire pour enregistrer la réservation.",
-      "summary": "Le formulaire contient des erreurs. Corrigez les champs signalés."
+      "summary": "Le formulaire contient des erreurs. Corrigez les champs signalés.",
+      "too_long": "Texte trop long.",
+      "full": "Ce créneau vient d'être complet. Choisissez un autre horaire.",
+      "slot_gone": "Cet horaire n'est plus disponible. Choisissez-en un autre.",
+      "exceptional": "Le restaurant est exceptionnellement fermé ce jour-là.",
+      "time": "Choisissez une heure d'arrivée.",
+      "date": "Date invalide.",
+      "range": "Valeur hors limites.",
+      "int": "Valeur invalide.",
+      "bot": "La demande n'a pas pu être traitée.",
+      "rate": "Trop de tentatives. Réessayez dans quelques minutes ou appelez-nous."
     },
     "unavailableTitle": "Réservation en ligne bientôt disponible",
-    "unavailableText": "L'enregistrement des réservations n'est pas encore activé sur ce site de démonstration. Aucune réservation n'a été créée. Pour réserver, appelez-nous au"
+    "unavailableText": "L'enregistrement des réservations n'est pas encore activé sur ce site de démonstration. Aucune réservation n'a été créée. Pour réserver, appelez-nous au",
+    "full": "complet",
+    "fullLabel": "{time}, complet",
+    "noCapacity": "Aucun horaire ne peut accueillir {n} personnes ce jour-là. Essayez une autre date ou appelez-nous."
   },
   "contact": {
     "title": "Accès & contact",
@@ -156,5 +169,52 @@
     "serverTitle": "Une erreur est survenue",
     "serverText": "Le problème vient de notre côté. Réessayez dans un instant ou appelez-nous.",
     "backHome": "Retour à l'accueil"
+  },
+  "mail": {
+    "confirmSubject": "Réservation confirmée — Ti Mango, {date} à {time}",
+    "hello": "Bonjour {name},",
+    "confirmIntro": "Votre table est réservée.",
+    "reference": "Référence",
+    "guests": "Couverts",
+    "when": "Date et heure",
+    "note": "Remarque",
+    "manage": "Pour consulter ou annuler votre réservation :",
+    "cancelHint": "Merci de nous prévenir si vous ne pouvez pas venir : la table pourra être proposée à d'autres clients.",
+    "cancelSubject": "Réservation annulée — Ti Mango, {date}",
+    "cancelIntroClient": "Votre réservation a bien été annulée.",
+    "cancelIntroRestaurant": "Nous sommes désolés : nous avons dû annuler votre réservation. N'hésitez pas à nous appeler pour trouver une autre date.",
+    "signature": "À bientôt,\nL'équipe Ti Mango",
+    "demo": "Message de démonstration — Ti Mango est une entreprise fictive."
+  },
+  "manage": {
+    "titleNew": "Votre table est réservée",
+    "title": "Votre réservation",
+    "emailSent": "Un email de confirmation a été envoyé à {email}.",
+    "emailFailed": "L'email de confirmation n'a pas pu être envoyé. Notez votre référence ou appelez-nous.",
+    "keepLink": "Gardez ce lien : il vous permet de consulter ou d'annuler votre réservation.",
+    "cancel": "Annuler la réservation",
+    "cancelQuestion": "Voulez-vous vraiment annuler cette réservation ?",
+    "cancelConfirm": "Oui, annuler",
+    "cancelled": "Cette réservation est annulée.",
+    "cancelledNow": "Votre réservation est annulée.",
+    "cancelEmail": "Un email de confirmation d'annulation vous a été envoyé.",
+    "past": "L'heure de cette réservation est passée.",
+    "lateCancel": "Pour toute modification, appelez-nous au",
+    "notFoundTitle": "Lien invalide",
+    "notFoundText": "Ce lien de réservation n'existe pas ou n'est plus valide.",
+    "status": {
+      "confirmee": "Confirmée",
+      "annulee_client": "Annulée",
+      "annulee_restaurant": "Annulée par le restaurant",
+      "honoree": "Honorée",
+      "absent": "Non honorée"
+    },
+    "reference": "Référence",
+    "guests": "Couverts",
+    "when": "Date et heure",
+    "name": "Nom",
+    "note": "Remarque",
+    "statusLabel": "Statut",
+    "another": "Faire une autre réservation"
   }
 }

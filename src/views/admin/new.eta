@@ -1,0 +1,19 @@
+<% layout('/admin/layout', it) %>
+<h1 class="h2">Nouvelle réservation</h1>
+<p class="muted">Réservation prise par téléphone. Limite : capacité de la salle. Si un email est saisi, le client reçoit la confirmation et un lien d'annulation.</p>
+<% const v = it.values; const e = it.errors; %>
+<% const err = (f) => e[f] ? `<p class="field-error" id="err-${f}">${it.msg(e[f])}</p>` : ''; %>
+<% const aria = (f) => e[f] ? ` aria-invalid="true" aria-describedby="err-${f}"` : ''; %>
+<form method="post" action="/admin/nouvelle" class="admin-form" novalidate>
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <div class="admin-form__row">
+    <label class="field"><span class="field__label">Date</span><input class="input" type="date" name="date" required value="<%= v.date || '' %>"<%~ aria('date') %>><%~ err('date') %></label>
+    <label class="field"><span class="field__label">Heure</span><input class="input" type="time" name="heure" required step="300" value="<%= v.heure || '' %>"<%~ aria('heure') %>><%~ err('heure') %></label>
+    <label class="field"><span class="field__label">Personnes</span><input class="input" type="number" name="personnes" required min="1" max="500" value="<%= v.personnes || '' %>"<%~ aria('personnes') %>><%~ err('personnes') %></label>
+  </div>
+  <label class="field"><span class="field__label">Nom</span><input class="input" type="text" name="nom" required maxlength="80" value="<%= v.nom || '' %>"<%~ aria('nom') %>><%~ err('nom') %></label>
+  <label class="field"><span class="field__label">Téléphone</span><input class="input" type="tel" name="telephone" required maxlength="20" value="<%= v.telephone || '' %>"<%~ aria('telephone') %>><%~ err('telephone') %></label>
+  <label class="field"><span class="field__label">Email (facultatif)</span><input class="input" type="email" name="email" maxlength="120" value="<%= v.email || '' %>"<%~ aria('email') %>><%~ err('email') %></label>
+  <label class="field"><span class="field__label">Remarque (facultatif)</span><textarea class="input" name="remarque" rows="3" maxlength="500"<%~ aria('remarque') %>><%= v.remarque || '' %></textarea><%~ err('remarque') %></label>
+  <button class="btn btn--primary btn--block" type="submit">Enregistrer la réservation</button>
+</form>

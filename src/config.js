@@ -9,6 +9,7 @@ const schema = z.object({
   MAIL_TRANSPORT: z.enum(['file', 'smtp']).default('file'),
   MAIL_FROM: z.string().min(3),
   SMTP_URL: z.string().optional(),
+  MAIL_DIR: z.string().default('var/mail'),
 }).refine((c) => c.MAIL_TRANSPORT !== 'smtp' || c.SMTP_URL, {
   message: 'SMTP_URL est requis quand MAIL_TRANSPORT=smtp',
   path: ['SMTP_URL'],

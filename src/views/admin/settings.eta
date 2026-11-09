@@ -1,0 +1,48 @@
+<% layout('/admin/layout', it) %>
+<% const FLASH = { reglages: 'Réglages enregistrés.', fermeture: 'Fermeture enregistrée.', fermeture_supprimee: 'Fermeture supprimée.' }; %>
+<% if (it.flash && FLASH[it.flash]) { %><p class="notice" role="status"><%= FLASH[it.flash] %></p><% } %>
+<h1 class="h2">Réglages des réservations</h1>
+<% const v = it.values; const e = it.errors; %>
+<% const err = (f) => e[f] ? `<p class="field-error" id="err-${f}">${it.msg(e[f])}</p>` : ''; %>
+<form method="post" action="/admin/reglages" class="admin-form" novalidate>
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <% for (const [name, label, hint, min, max] of [
+    ['capacite_en_ligne', 'Couverts réservables en ligne', 'Couverts simultanés ouverts à la réservation en ligne ; le reste est gardé pour les clients sans réservation.', 1, 42],
+    ['capacite_salle', 'Capacité de la salle', 'Limite des réservations saisies dans l\'admin.', 1, 500],
+    ['personnes_max_en_ligne', 'Personnes maximum par réservation en ligne', 'Au-delà, le client est invité à appeler.', 1, 42],
+    ['duree_table_min', 'Durée d\'une table (minutes)', 'Temps pendant lequel une réservation occupe ses couverts.', 30, 300],
+    ['delai_min_min', 'Délai minimum avant l\'arrivée (minutes)', 'Pour une réservation le jour même.', 0, 2880],
+    ['jours_max', 'Réservation possible jusqu\'à (jours)', '', 1, 365],
+  ]) { %>
+  <label class="field"><span class="field__label"><%= label %></span>
+    <input class="input input--short" type="number" name="<%= name %>" min="<%= min %>" max="<%= max %>" required value="<%= v[name] %>"<% if (e[name]) { %> aria-invalid="true"<% } %>>
+    <% if (hint) { %><span class="hint"><%= hint %></span><% } %><%~ err(name) %></label>
+  <% } %>
+  <label class="field"><span class="field__label">Intervalle entre deux créneaux</span>
+    <select class="input input--short" name="intervalle_min">
+      <% for (const n of [15, 30, 60]) { %><option value="<%= n %>"<% if (Number(v.intervalle_min) === n) { %> selected<% } %>><%= n %> min</option><% } %>
+    </select><%~ err('intervalle_min') %></label>
+  <button class="btn btn--primary" type="submit">Enregistrer les réglages</button>
+</form>
+
+<h2 class="h2 admin-section">Fermetures exceptionnelles</h2>
+<p class="muted">Ces jours-là, la réservation en ligne est impossible. Les horaires hebdomadaires se modifient dans content/restaurant.json.</p>
+<% if (!it.closures.length) { %><p class="muted">Aucune fermeture prévue.</p><% } %>
+<ul class="closures">
+  <% for (const c of it.closures) { %>
+  <li>
+    <span><strong><%= it.fmt.dateLong(c.date) %></strong><% if (c.motif) { %> — <%= c.motif %><% } %></span>
+    <form method="post" action="/admin/fermetures/<%= c.date %>/supprimer">
+      <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+      <button class="btn btn--secondary" type="submit">Supprimer</button>
+    </form>
+  </li>
+  <% } %>
+</ul>
+<% const ce = it.closureErrors; %>
+<form method="post" action="/admin/fermetures" class="admin-form admin-form--inline" novalidate>
+  <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <label class="field"><span class="field__label">Date</span><input class="input" type="date" name="date" required value="<%= it.closureValues.date || '' %>"><% if (ce.date) { %><p class="field-error"><%= it.msg(ce.date) %></p><% } %></label>
+  <label class="field"><span class="field__label">Motif (facultatif)</span><input class="input" type="text" name="motif" maxlength="120" value="<%= it.closureValues.motif || '' %>"></label>
+  <button class="btn btn--secondary" type="submit">Ajouter la fermeture</button>
+</form>

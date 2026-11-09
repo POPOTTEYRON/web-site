@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 import { createApp } from '../../src/app.js';
 import { pool } from '../../src/db/pool.js';
 import { ROUTES } from '../../src/i18n/routes.js';
+import { resetDb } from '../helpers.js';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -13,6 +14,7 @@ let server; let browser; let base;
 const VIEWPORTS = { mobile: { width: 390, height: 844 }, tablet: { width: 768, height: 1024 }, desktop: { width: 1440, height: 900 } };
 
 before(async () => {
+  await resetDb();
   server = createApp().listen(0);
   await new Promise((r) => server.once('listening', r));
   base = `http://localhost:${server.address().port}`;
@@ -83,7 +85,7 @@ test('carte sans JavaScript : toutes les catégories restent lisibles', async ()
   await ctx.close();
 });
 
-test('réservation : parcours complet, erreurs signalées, aucune fausse confirmation', async () => {
+test('réservation : parcours complet, erreurs signalées, confirmation puis annulation', async () => {
   const { ctx, page, errors } = await open();
   await page.goto(base + '/reserver');
   await page.locator('label.choice:has(input[name=personnes][value="4"])').click();
@@ -113,10 +115,17 @@ test('réservation : parcours complet, erreurs signalées, aucune fausse confirm
 
   await page.getByLabel('Email').fill('demo@exemple.fr');
   assert.match(await page.locator('[data-summary-time]').textContent(), /19h30/);
-  const [res] = await Promise.all([page.waitForResponse((r) => r.request().method() === 'POST'), page.getByRole('button', { name: 'Confirmer la réservation' }).click()]);
-  assert.equal(res.status(), 503);
-  assert.match(await page.locator('h1').textContent(), /bientôt disponible/);
-  assert.deepEqual(errors.filter((e) => !/503/.test(e)), []);
+  await Promise.all([page.waitForURL(/\/reservation\/[\w-]{43}\?nouvelle=1/), page.getByRole('button', { name: 'Confirmer la réservation' }).click()]);
+  assert.match(await page.locator('h1').textContent(), /Votre table est réservée/);
+  assert.match(await page.locator('.notice').first().textContent(), /demo@exemple\.fr/);
+  assert.match(await page.locator('.recap').textContent(), /19h30/);
+
+  // Annulation en deux temps (sans JavaScript nécessaire)
+  await page.getByText('Annuler la réservation').click();
+  await Promise.all([page.waitForURL(/annulee=1/), page.getByRole('button', { name: 'Oui, annuler' }).click()]);
+  assert.match(await page.locator('.notice').first().textContent(), /annulée/);
+  assert.equal(await page.getByText('Annuler la réservation').count(), 0);
+  assert.deepEqual(errors, []);
   await ctx.close();
 });
 

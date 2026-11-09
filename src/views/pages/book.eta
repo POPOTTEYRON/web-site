@@ -37,7 +37,7 @@
       <% const inStrip = it.days.some((d) => d.date === it.date); %>
       <label class="field field--inline">
         <span class="field__label"><%= it.t('book.otherDate') %></span>
-        <input class="input" type="date" name="date" min="<%= it.minDate %>" value="<%= it.date && !inStrip ? it.date : '' %>" data-other-date>
+        <input class="input" type="date" name="date" min="<%= it.minDate %>" max="<%= it.maxDate %>" value="<%= it.date && !inStrip ? it.date : '' %>" data-other-date>
       </label>
       <% if (it.dateError) { %><p class="field-error" role="alert"><%= it.t('book.errors.' + it.dateError) %></p><% } %>
     </fieldset>
@@ -54,36 +54,46 @@
     <input type="hidden" name="date" value="<%= it.date %>">
     <fieldset class="field-group" data-slot-group>
       <legend class="field-group__legend"><%= it.t('book.step3') %> — <%= it.fmt.dateLong(it.date) %></legend>
-      <% if (it.slots.length) { %>
+      <% if (it.slots.length && !it.allFull) { %>
       <div class="choice-grid">
-        <% it.slots.forEach((s, i) => { %>
+        <% let first = true; %>
+        <% it.slots.forEach((s) => { %>
         <label class="choice">
-          <input type="radio" name="heure" value="<%= s %>" required<% if (i === 0) { %> data-first<% } %>>
-          <span class="choice__box"><%= it.fmt.time(s) %></span>
+          <input type="radio" name="heure" value="<%= s.time %>" required<% if (s.full) { %> disabled aria-label="<%= it.t('book.fullLabel', { time: it.fmt.time(s.time) }) %>"<% } %><% if (s.time === it.values.heure && !s.full) { %> checked<% } %><% if (!s.full && first) { first = false; %> data-first<% } %>>
+          <span class="choice__box"><%= it.fmt.time(s.time) %></span>
         </label>
         <% }) %>
       </div>
+      <% if (it.errors.heure) { %><p class="field-error" id="err-heure" role="alert"><%= it.t('book.errors.' + it.errors.heure) %></p><% } %>
       <p class="hint"><%= it.t('book.slotsNote') %></p>
+      <% } else if (it.allFull) { %>
+      <p class="notice"><%= it.t('book.noCapacity', { n: it.party }) %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
       <% } else { %>
       <p class="notice"><%= it.t('book.noSlots') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
       <% } %>
     </fieldset>
 
-    <% if (it.slots.length) { %>
+    <% if (it.slots.length && !it.allFull) { %>
     <fieldset class="field-group">
       <legend class="field-group__legend"><%= it.t('book.step4') %></legend>
+      <% const err = (f) => it.errors[f] ? ` aria-invalid="true" aria-describedby="err-${f}"` : ''; %>
+      <% const msg = (f) => it.errors[f] ? `<p class="field-error" id="err-${f}">${it.t('book.errors.' + it.errors[f])}</p>` : ''; %>
       <label class="field"><span class="field__label"><%= it.t('book.name') %></span>
-        <input class="input" type="text" name="nom" autocomplete="name" required maxlength="80"></label>
+        <input class="input" type="text" name="nom" autocomplete="name" required maxlength="80" value="<%= it.values.nom || '' %>"<%~ err('nom') %>><%~ msg('nom') %></label>
       <label class="field"><span class="field__label"><%= it.t('book.phone') %></span>
-        <input class="input" type="tel" name="telephone" autocomplete="tel" required maxlength="20" inputmode="tel" pattern="[0-9 +\(\)\.\-]{6,20}"></label>
+        <input class="input" type="tel" name="telephone" autocomplete="tel" required maxlength="20" inputmode="tel" pattern="[0-9 +\(\)\.\-]{6,20}" value="<%= it.values.telephone || '' %>"<%~ err('telephone') %>><%~ msg('telephone') %></label>
       <label class="field"><span class="field__label"><%= it.t('book.email') %></span>
-        <input class="input" type="email" name="email" autocomplete="email" required maxlength="120"></label>
+        <input class="input" type="email" name="email" autocomplete="email" required maxlength="120" value="<%= it.values.email || '' %>"<%~ err('email') %>><%~ msg('email') %></label>
       <label class="field"><span class="field__label"><%= it.t('book.note') %></span>
-        <textarea class="input" name="remarque" rows="3" maxlength="500" placeholder="<%= it.t('book.notePlaceholder') %>"></textarea></label>
+        <textarea class="input" name="remarque" rows="3" maxlength="500" placeholder="<%= it.t('book.notePlaceholder') %>"<%~ err('remarque') %>><%= it.values.remarque || '' %></textarea><%~ msg('remarque') %></label>
       <label class="check">
-        <input type="checkbox" name="consentement" value="oui" required>
+        <input type="checkbox" name="consentement" value="oui" required<%~ err('consentement') %>>
         <span><%= it.t('book.consent') %> <a href="<%= it.url('privacy') %>"><%= it.t('book.privacyLink') %></a></span>
+        <%~ msg('consentement') %>
       </label>
+      <div class="hp" aria-hidden="true">
+        <label>Site web<input type="text" name="site_web" tabindex="-1" autocomplete="off"></label>
+      </div>
     </fieldset>
     <div class="booking__submit">
       <p><strong><%= it.t('book.summary') %> :</strong> <%= it.t('book.people', { n: it.party }) %><% if (it.lang === 'en') { %> <%= it.party > 1 ? 'guests' : 'guest' %><% } %> · <%= it.fmt.dateLong(it.date) %><span data-summary-time></span></p>

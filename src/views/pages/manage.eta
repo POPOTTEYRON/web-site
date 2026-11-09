@@ -1,0 +1,43 @@
+<% layout('/layouts/base', { title: it.isNew ? it.t('manage.titleNew') : it.t('manage.title'), noindex: true, hideBar: true }) %>
+<% const r = it.r; %>
+<div class="wrap wrap--narrow page-head">
+  <h1 class="h1"><%= it.isNew && r.statut === 'confirmee' ? it.t('manage.titleNew') : it.t('manage.title') %></h1>
+  <% if (it.isNew) { %>
+    <% if (r.email_envoye_le) { %>
+    <p class="notice" role="status"><%= it.t('manage.emailSent', { email: r.email }) %></p>
+    <% } else { %>
+    <p class="notice notice--error" role="status"><%= it.t('manage.emailFailed') %></p>
+    <% } %>
+  <% } %>
+  <% if (it.cancelled) { %>
+  <p class="notice" role="status"><%= it.t('manage.cancelledNow') %><% if (it.cancelEmailSent) { %> <%= it.t('manage.cancelEmail') %><% } %></p>
+  <% } %>
+</div>
+<div class="wrap wrap--narrow booking">
+  <dl class="recap">
+    <div><dt><%= it.t('manage.reference') %></dt><dd class="recap__ref"><%= r.reference %></dd></div>
+    <div><dt><%= it.t('manage.when') %></dt><dd><%= it.fmt.dateLong(r.date) %>, <%= it.fmt.time(r.heure) %></dd></div>
+    <div><dt><%= it.t('manage.guests') %></dt><dd><%= r.personnes %></dd></div>
+    <div><dt><%= it.t('manage.name') %></dt><dd><%= r.nom %></dd></div>
+    <% if (r.remarque) { %><div><dt><%= it.t('manage.note') %></dt><dd><%= r.remarque %></dd></div><% } %>
+    <div><dt><%= it.t('manage.statusLabel') %></dt><dd><span class="badge badge--<%= r.statut %>"><%= it.t('manage.status.' + r.statut) %></span></dd></div>
+  </dl>
+
+  <% if (it.canCancel) { %>
+  <p class="muted"><%= it.t('manage.keepLink') %></p>
+  <details class="cancel">
+    <summary class="btn btn--secondary"><%= it.t('manage.cancel') %></summary>
+    <form method="post" action="<%= it.lang === 'en' ? '/en/booking' : '/reservation' %>/<%= it.token %>/annuler" class="cancel__form">
+      <p><%= it.t('manage.cancelQuestion') %></p>
+      <button class="btn btn--primary" type="submit"><%= it.t('manage.cancelConfirm') %></button>
+    </form>
+  </details>
+  <% } else if (r.statut === 'confirmee' && it.past) { %>
+  <p class="muted"><%= it.t('manage.past') %></p>
+  <% } %>
+  <p class="muted"><%= it.t('manage.lateCancel') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
+  <div class="actions">
+    <a class="btn btn--secondary" href="<%= it.restaurant.carteOsm %>" rel="noopener"><%= it.t('common.directions') %></a>
+    <a class="link-arrow" href="<%= it.url('book') %>"><%= it.t('manage.another') %></a>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<% layout('/admin/layout', it) %>
+<h1 class="h2">Planning — 3 semaines</h1>
+<p class="muted">Capacité en ligne : <%= it.rules.capacityOnline %> couverts simultanés · salle : <%= it.rules.capacityRoom %>.</p>
+<ul class="planning">
+  <% for (const d of it.days) { %>
+  <li>
+    <a class="planning__row<%= d.weeklyClosed || d.closure ? ' planning__row--closed' : '' %>" href="/admin?date=<%= d.date %>">
+      <span class="planning__date"><%= it.fmt.dateLong(d.date) %><% if (d.isToday) { %> · aujourd'hui<% } %></span>
+      <span class="planning__info">
+        <% if (d.weeklyClosed) { %>Fermé<% } else if (d.closure) { %>Fermeture exceptionnelle<% } else { %><%= d.reservations %> résa · <%= d.couverts %> couverts<% } %>
+      </span>
+    </a>
+  </li>
+  <% } %>
+</ul>

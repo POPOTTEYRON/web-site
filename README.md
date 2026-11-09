@@ -25,9 +25,17 @@ sudo -u postgres psql -c "CREATE ROLE timango LOGIN PASSWORD 'mot_de_passe_local
 ```
 
 ```bash
-npm run db:migrate            # applique src/db/migrations
-npm run dev                   # http://localhost:3000
+npm run db:migrate                                  # applique src/db/migrations
+npm run admin:creer -- gerant@exemple.fr            # crée le compte admin (mot de passe demandé, 12 caractères min.)
+npm run dev                                         # http://localhost:3000 — admin : /admin
 ```
+
+## Réservations et emails
+
+- La réservation en ligne vérifie la capacité côté serveur, sous verrou PostgreSQL par date : pas de surréservation, même en cas de demandes simultanées.
+- Règles modifiables dans l'admin (Réglages) : couverts en ligne, capacité de la salle, durée d'une table, intervalle des créneaux, délai minimum, horizon de réservation, fermetures exceptionnelles.
+- **Emails : avec `MAIL_TRANSPORT=file` (par défaut), aucun email ne part.** Chaque message est écrit en `.eml` dans `var/mail/` (ouvrable avec n'importe quel client mail). L'envoi réel (`smtp`) ne doit être activé qu'en production.
+- Le client reçoit un lien secret de gestion (`/reservation/<jeton>`) qui lui permet d'annuler. Seule l'empreinte SHA-256 du jeton est stockée.
 
 ## Tests
 

@@ -133,10 +133,23 @@
       "phone": "Invalid phone number.",
       "slot": "Choose an arrival time.",
       "consent": "Your consent is needed to record the booking.",
-      "summary": "The form has errors. Please correct the highlighted fields."
+      "summary": "The form has errors. Please correct the highlighted fields.",
+      "too_long": "Text is too long.",
+      "full": "This time has just become fully booked. Please choose another time.",
+      "slot_gone": "This time is no longer available. Please choose another.",
+      "exceptional": "The restaurant is exceptionally closed that day.",
+      "time": "Choose an arrival time.",
+      "date": "Invalid date.",
+      "range": "Value out of range.",
+      "int": "Invalid value.",
+      "bot": "The request could not be processed.",
+      "rate": "Too many attempts. Please try again in a few minutes or call us."
     },
     "unavailableTitle": "Online booking coming soon",
-    "unavailableText": "Saving bookings is not yet enabled on this demo website. No booking has been made. To book, please call us on"
+    "unavailableText": "Saving bookings is not yet enabled on this demo website. No booking has been made. To book, please call us on",
+    "full": "full",
+    "fullLabel": "{time}, fully booked",
+    "noCapacity": "No time can seat {n} guests that day. Try another date or call us."
   },
   "contact": {
     "title": "Getting here",
@@ -156,5 +169,52 @@
     "serverTitle": "Something went wrong",
     "serverText": "The problem is on our side. Please try again in a moment or call us.",
     "backHome": "Back to home page"
+  },
+  "mail": {
+    "confirmSubject": "Booking confirmed — Ti Mango, {date} at {time}",
+    "hello": "Hello {name},",
+    "confirmIntro": "Your table is booked.",
+    "reference": "Reference",
+    "guests": "Guests",
+    "when": "Date and time",
+    "note": "Note",
+    "manage": "To view or cancel your booking:",
+    "cancelHint": "Please let us know if you can't make it, so the table can be offered to other guests.",
+    "cancelSubject": "Booking cancelled — Ti Mango, {date}",
+    "cancelIntroClient": "Your booking has been cancelled.",
+    "cancelIntroRestaurant": "We are sorry: we had to cancel your booking. Please call us to find another date.",
+    "signature": "See you soon,\nThe Ti Mango team",
+    "demo": "Demo message — Ti Mango is a fictional business."
+  },
+  "manage": {
+    "titleNew": "Your table is booked",
+    "title": "Your booking",
+    "emailSent": "A confirmation email has been sent to {email}.",
+    "emailFailed": "The confirmation email could not be sent. Please note your reference or call us.",
+    "keepLink": "Keep this link: it lets you view or cancel your booking.",
+    "cancel": "Cancel booking",
+    "cancelQuestion": "Do you really want to cancel this booking?",
+    "cancelConfirm": "Yes, cancel",
+    "cancelled": "This booking is cancelled.",
+    "cancelledNow": "Your booking has been cancelled.",
+    "cancelEmail": "A cancellation confirmation email has been sent to you.",
+    "past": "The time of this booking has passed.",
+    "lateCancel": "For any change, please call us on",
+    "notFoundTitle": "Invalid link",
+    "notFoundText": "This booking link does not exist or is no longer valid.",
+    "status": {
+      "confirmee": "Confirmed",
+      "annulee_client": "Cancelled",
+      "annulee_restaurant": "Cancelled by the restaurant",
+      "honoree": "Honoured",
+      "absent": "No-show"
+    },
+    "reference": "Reference",
+    "guests": "Guests",
+    "when": "Date and time",
+    "name": "Name",
+    "note": "Note",
+    "statusLabel": "Status",
+    "another": "Make another booking"
   }
 }

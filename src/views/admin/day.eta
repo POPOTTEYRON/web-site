@@ -1,0 +1,49 @@
+<% layout('/admin/layout', it) %>
+<% const FLASH = { statut: 'Statut mis à jour.', refuse: 'Changement de statut impossible depuis l\'état actuel.', annulee: 'Réservation annulée (aucun email envoyé).', annulee_email: 'Réservation annulée. Le client a été prévenu par email.', creee: 'Réservation ajoutée.', creee_email: 'Réservation ajoutée. Email de confirmation envoyé au client.' }; %>
+<% if (it.flash && FLASH[it.flash]) { %><p class="notice<%= it.flash === 'refuse' ? ' notice--error' : '' %>" role="status"><%= FLASH[it.flash] %></p><% } %>
+<div class="day-nav">
+  <a class="icon-btn" href="/admin?date=<%= it.prev %>" aria-label="Jour précédent">←</a>
+  <h1 class="h2 day-nav__title"><%= it.fmt.dateLong(it.date) %><% if (it.date === it.today) { %> <span class="muted">(aujourd'hui)</span><% } %></h1>
+  <a class="icon-btn" href="/admin?date=<%= it.next %>" aria-label="Jour suivant">→</a>
+</div>
+<form class="day-pick" method="get" action="/admin">
+  <label class="field field--inline"><span class="field__label">Aller au</span><input class="input" type="date" name="date" value="<%= it.date %>"></label>
+  <button class="btn btn--secondary" type="submit">Afficher</button>
+</form>
+<% if (it.closed) { %><p class="notice">Fermeture hebdomadaire (lundi).</p><% } %>
+<% if (it.closure) { %><p class="notice">Fermeture exceptionnelle<% if (it.closure.motif) { %> : <%= it.closure.motif %><% } %>.</p><% } %>
+
+<dl class="stats">
+  <div><dt>réservations actives</dt><dd><%= it.totals.reservations %></dd></div>
+  <div><dt>couverts</dt><dd><%= it.totals.couverts %></dd></div>
+  <div><dt>pic<% if (it.peak.time) { %> à <%= it.fmt.time(it.peak.time) %><% } %></dt><dd><%= it.peak.seats %>/<%= it.rules.capacityRoom %></dd></div>
+</dl>
+<a class="btn btn--primary btn--block" href="/admin/nouvelle?date=<%= it.date %>">+ Ajouter une réservation</a>
+
+<% for (const [label, list] of [['Midi', it.lunch], ['Soir', it.dinner]]) { %>
+<section class="service" aria-label="<%= label %>">
+  <h2 class="service__title"><%= label %></h2>
+  <% if (!list.length) { %><p class="muted">Aucune réservation.</p><% } %>
+  <% for (const r of list) { const off = r.statut.startsWith('annulee'); %>
+  <article class="resa<%= off ? ' resa--off' : '' %>" id="r<%= r.id %>">
+    <div class="resa__top"><span class="resa__time"><%= it.fmt.time(r.heure) %></span><span class="resa__party"><%= r.personnes %> pers.</span></div>
+    <p class="resa__who"><%= r.nom %> · <a href="tel:<%= r.telephone.replace(/[^0-9+]/g, '') %>"><%= r.telephone %></a><% if (r.email) { %> · <a href="mailto:<%= r.email %>"><%= r.email %></a><% } %></p>
+    <p class="resa__meta"><%= r.source === 'telephone' ? 'Prise par téléphone' : 'En ligne' %> · réf. <%= r.reference %><% if (r.langue === 'en') { %> · EN<% } %></p>
+    <% if (r.remarque) { %><p class="resa__note"><strong>Remarque :</strong> <%= r.remarque %></p><% } %>
+    <p><span class="badge badge--<%= r.statut %>"><%= it.t('manage.status.' + r.statut) %></span></p>
+    <% const actions = [['honoree', 'Honorée'], ['absent', 'Absent'], ['confirmee', 'Rétablir'], ['annulee_restaurant', 'Annuler']].filter(([s]) => it.transitions[s].includes(r.statut)); %>
+    <% if (actions.length) { %>
+    <div class="resa__actions">
+      <% for (const [s, l] of actions) { %>
+      <form method="post" action="/admin/reservations/<%= r.id %>/statut"<% if (s === 'annulee_restaurant') { %> data-confirm="Annuler cette réservation ?<%= r.email ? ' Le client sera prévenu par email.' : '' %>"<% } %>>
+        <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+        <input type="hidden" name="statut" value="<%= s %>">
+        <button class="btn <%= s === 'annulee_restaurant' ? 'btn--danger' : 'btn--secondary' %>" type="submit"><%= l %></button>
+      </form>
+      <% } %>
+    </div>
+    <% } %>
+  </article>
+  <% } %>
+</section>
+<% } %>

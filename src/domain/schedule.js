@@ -4,13 +4,26 @@ import { restaurant } from '../content.js';
 
 export const TIMEZONE = 'America/Guadeloupe';
 
-// Valeurs par défaut des règles de réservation (hypothèse H1) — passeront en base, éditables dans l'admin.
+// Règles par défaut (hypothèse H1). Les valeurs en vigueur sont en base (table reglages), éditables dans l'admin.
 export const RULES = Object.freeze({
   slotStepMin: 30,
   tableDurationMin: 90,
   minLeadMin: 60,
   maxDaysAhead: 60,
   maxPartyOnline: 8,
+  capacityOnline: 36,
+  capacityRoom: 42,
+});
+
+/** Convertit la ligne `reglages` en objet de règles. */
+export const rulesFromRow = (r) => Object.freeze({
+  slotStepMin: r.intervalle_min,
+  tableDurationMin: r.duree_table_min,
+  minLeadMin: r.delai_min_min,
+  maxDaysAhead: r.jours_max,
+  maxPartyOnline: r.personnes_max_en_ligne,
+  capacityOnline: r.capacite_en_ligne,
+  capacityRoom: r.capacite_salle,
 });
 
 const fmt = new Intl.DateTimeFormat('en-CA', {
@@ -61,20 +74,22 @@ export function todayStatus(now = new Date()) {
 }
 
 /**
- * Pourquoi une date n'est pas réservable : 'invalid' | 'past' | 'too_far' | 'closed' | null.
+ * Pourquoi une date n'est pas réservable en ligne :
+ * 'invalid' | 'past' | 'too_far' | 'closed' (fermeture hebdomadaire) | 'exceptional' (fermeture exceptionnelle) | null.
  */
-export function dateProblem(dateStr, now = new Date(), rules = RULES) {
+export function dateProblem(dateStr, now = new Date(), rules = RULES, closures = new Set()) {
   if (!isValidDate(dateStr)) return 'invalid';
   const today = localNow(now).date;
   if (dateStr < today) return 'past';
   if (dateStr > addDays(today, rules.maxDaysAhead)) return 'too_far';
   if (!openingHours(dateStr)) return 'closed';
+  if (closures.has(dateStr)) return 'exceptional';
   return null;
 }
 
 /** Heures d'arrivée possibles pour une date (sans tenir compte de la capacité). */
-export function slotsFor(dateStr, now = new Date(), rules = RULES) {
-  if (dateProblem(dateStr, now, rules)) return [];
+export function slotsFor(dateStr, now = new Date(), rules = RULES, closures = new Set()) {
+  if (dateProblem(dateStr, now, rules, closures)) return [];
   const h = openingHours(dateStr);
   const first = toMinutes(h.open);
   const last = toMinutes(h.close) - rules.tableDurationMin;
@@ -86,10 +101,10 @@ export function slotsFor(dateStr, now = new Date(), rules = RULES) {
 }
 
 /** Les n prochains jours (raccourcis du formulaire), fermés compris pour les afficher comme tels. */
-export function nextDays(n = 7, now = new Date()) {
+export function nextDays(n = 7, now = new Date(), closures = new Set()) {
   const today = localNow(now).date;
   return Array.from({ length: n }, (_, i) => {
     const date = addDays(today, i);
-    return { date, isToday: i === 0, closed: !openingHours(date) };
+    return { date, isToday: i === 0, closed: !openingHours(date) || closures.has(date) };
   });
 }

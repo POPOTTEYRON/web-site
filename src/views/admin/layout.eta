@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title><%= it.title %> · Admin Ti Mango</title>
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/site.css">
+<script src="/js/boot.js"></script>
+<script src="/js/admin.js" defer></script>
+</head>
+<body class="admin">
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="admin-header">
+  <div class="wrap admin-header__inner">
+    <span class="wordmark wordmark--light">TI MANGO · Admin</span>
+    <% if (it.adminEmail) { %>
+    <form method="post" action="/admin/deconnexion">
+      <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+      <button class="admin-header__logout" type="submit">Déconnexion</button>
+    </form>
+    <% } %>
+  </div>
+</header>
+<% if (it.adminEmail) { %>
+<nav class="admin-nav" aria-label="Administration">
+  <div class="wrap admin-nav__inner">
+    <% for (const [key, href, label] of [['jour', '/admin', 'Jour'], ['planning', '/admin/planning', 'Planning'], ['nouvelle', '/admin/nouvelle', 'Ajouter'], ['reglages', '/admin/reglages', 'Réglages']]) { %>
+    <a href="<%= href %>"<% if (it.section === key) { %> aria-current="page"<% } %>><%= label %></a>
+    <% } %>
+  </div>
+</nav>
+<% } %>
+<main id="contenu" tabindex="-1" class="wrap wrap--narrow admin-main">
+<%~ it.body %>
+</main>
+</body>
+</html>

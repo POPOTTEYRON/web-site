@@ -77,12 +77,6 @@ test('réserver : avec deux champs date, la dernière valeur non vide l\'emporte
   assert.match(res.text, new RegExp(`name="date" value="${d}"`));
 });
 
-test('réserver (POST) : aucune fausse confirmation tant que l\'enregistrement n\'existe pas', async () => {
-  const res = await request(app).post('/reserver').type('form').send('personnes=2');
-  assert.equal(res.status, 503);
-  assert.match(res.text, /Aucune réservation n&#39;a été créée/);
-});
-
 test('404 localisée', async () => {
   const fr = await request(app).get('/nexiste-pas');
   assert.equal(fr.status, 404);

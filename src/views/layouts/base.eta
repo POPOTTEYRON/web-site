@@ -28,6 +28,6 @@
 <%~ it.body %>
 </main>
 <%~ include('/partials/footer', it) %>
-<% if (it.page !== 'book') { %><%~ include('/partials/mobile-bar', it) %><% } %>
+<% if (it.page !== 'book' && !it.hideBar) { %><%~ include('/partials/mobile-bar', it) %><% } %>
 </body>
 </html>

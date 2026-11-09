@@ -3,11 +3,15 @@ import helmet from 'helmet';
 import { pool } from './db/pool.js';
 import { config } from './config.js';
 import { publicRouter } from './routes/public.js';
+import { reservationRouter } from './routes/reservation.js';
+import { adminRouter } from './routes/admin.js';
+import { sameOrigin } from './middleware/protect.js';
 import { localize, langFromPath } from './middleware/locals.js';
 import { translator } from './i18n/index.js';
 import { render } from './render.js';
 
-export function createApp() {
+/** @param {{ rateLimit?: boolean }} options  rateLimit : désactivé par défaut en test. */
+export function createApp({ rateLimit = config.NODE_ENV !== 'test' } = {}) {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
@@ -26,6 +30,9 @@ export function createApp() {
       },
     },
     hsts: config.isProd,
+    // same-origin : le lien de gestion (jeton) n'est jamais transmis à un site tiers,
+    // mais le navigateur envoie bien l'origine sur nos propres formulaires.
+    referrerPolicy: { policy: 'same-origin' },
   }));
   app.use(express.static('public', { maxAge: config.isProd ? '7d' : 0, index: false }));
 
@@ -38,7 +45,10 @@ export function createApp() {
     }
   });
 
+  app.use(sameOrigin);
   app.use(publicRouter());
+  app.use(reservationRouter({ rateLimit }));
+  app.use(adminRouter({ rateLimit }));
 
   app.use((req, res, next) => {
     const lang = langFromPath(req.path);
