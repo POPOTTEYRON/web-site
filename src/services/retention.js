@@ -1,7 +1,10 @@
 // Conservation des données : les coordonnées des clients sont effacées
 // `conservation_mois` mois après la date de leur réservation.
 import * as repo from '../db/repo.js';
-import { localNow } from '../domain/schedule.js';
+import { localNow, addDays } from '../domain/schedule.js';
+
+/** Les remarques peuvent contenir une allergie (donnée de santé) : conservées 30 jours seulement. */
+export const NOTE_RETENTION_DAYS = 30;
 
 /** Date limite (YYYY-MM-DD) : tout ce qui est strictement antérieur est anonymisé. */
 export function cutoffDate(today, months) {
@@ -16,6 +19,8 @@ export function cutoffDate(today, months) {
 export async function purgeExpiredPersonalData(now = new Date()) {
   const { conservation_mois: months } = await repo.getSettingsRow();
   const before = cutoffDate(localNow(now).date, months);
+  const today = localNow(now).date;
+  const notes = await repo.clearNotesBefore(addDays(today, -NOTE_RETENTION_DAYS));
   const count = await repo.anonymizeBefore(before);
-  return { before, count };
+  return { before, count, notes };
 }

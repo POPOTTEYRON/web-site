@@ -3,6 +3,6 @@
 import { purgeExpiredPersonalData } from '../src/services/retention.js';
 import { pool } from '../src/db/pool.js';
 
-const { before, count } = await purgeExpiredPersonalData();
-console.log(`${count} réservation(s) antérieure(s) au ${before} anonymisée(s).`);
+const { before, count, notes } = await purgeExpiredPersonalData();
+console.log(`${count} réservation(s) antérieure(s) au ${before} anonymisée(s), ${notes} remarque(s) de plus de 30 jours effacée(s).`);
 await pool.end();

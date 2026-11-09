@@ -146,3 +146,9 @@ export async function confirmedForDate(date, db = pool) {
   const { rows } = await db.query(`SELECT ${COLUMNS} FROM reservations WHERE date = $1 AND statut = 'confirmee' ORDER BY heure`, [date]);
   return rows;
 }
+
+/** Efface les remarques (allergies = données de santé) des réservations antérieures à `before`. */
+export async function clearNotesBefore(before, db = pool) {
+  const { rowCount } = await db.query('UPDATE reservations SET remarque = NULL WHERE date < $1 AND remarque IS NOT NULL', [before]);
+  return rowCount;
+}

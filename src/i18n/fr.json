@@ -118,7 +118,7 @@
     "email": "Email",
     "note": "Remarque (facultatif)",
     "notePlaceholder": "Allergie, chaise haute, occasion…",
-    "consent": "J'accepte que ces informations soient utilisées pour gérer ma réservation.",
+    "consent": "J'accepte que ces informations, y compris une éventuelle allergie indiquée en remarque, soient utilisées pour gérer ma réservation.",
     "privacyLink": "Politique de confidentialité",
     "submit": "Confirmer la réservation",
     "summary": "Récapitulatif",
@@ -151,7 +151,8 @@
     "full": "complet",
     "fullLabel": "{time}, complet",
     "noCapacity": "Aucun horaire ne peut accueillir {n} personnes ce jour-là. Essayez une autre date ou appelez-nous.",
-    "noMore": "terminé"
+    "noMore": "terminé",
+    "noteHint": "Une allergie indiquée ici sert uniquement à préparer votre repas ; la remarque est effacée 30 jours après votre venue."
   },
   "contact": {
     "title": "Accès & contact",

@@ -8,6 +8,7 @@ import { newToken, hashToken, newReference } from '../security.js';
 import { sendMail } from '../mail/index.js';
 import { confirmationEmail, cancellationEmail } from '../mail/messages.js';
 import { config } from '../config.js';
+import { logError } from '../logger.js';
 
 export class BookingError extends Error {
   constructor(code, field = null) { super(code); this.code = code; this.field = field; }
@@ -36,7 +37,7 @@ async function trySend(message, reservationId) {
     if (reservationId) await repo.markEmailSent(reservationId);
     return true;
   } catch (err) {
-    console.error(`[email] échec d'envoi (réservation ${reservationId ?? '?'}) : ${err.message}`);
+    logError(err, `[email] réservation ${reservationId ?? '?'}`);
     return false;
   }
 }

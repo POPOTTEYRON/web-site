@@ -6,13 +6,16 @@
   <p>Ti Mango, 12 rue de la Plage, 97180 Sainte-Anne — <a href="mailto:<%= it.restaurant.email %>"><%= it.restaurant.email %></a>.</p>
   <h2>Données collectées et finalité</h2>
   <p>Lors d'une réservation : nom, téléphone, email, nombre de personnes, date, heure et, si vous le souhaitez, une remarque. Ces données servent uniquement à enregistrer et gérer votre réservation (confirmation, éventuelle annulation, contact en cas d'imprévu).</p>
-  <p>Si vous indiquez une allergie dans la remarque, cette information n'est utilisée que pour préparer votre repas. Ne communiquez que ce qui est utile.</p>
+  <p>Si vous indiquez une allergie dans la remarque, il s'agit d'une donnée de santé : elle n'est utilisée que pour préparer votre repas, avec votre consentement explicite donné en cochant la case du formulaire. Ne communiquez que ce qui est utile.</p>
   <h2>Base légale</h2>
-  <p>Mesures précontractuelles prises à votre demande (article 6.1.b du RGPD).</p>
+  <p>Mesures précontractuelles prises à votre demande (article 6.1.b du RGPD). Pour une allergie indiquée en remarque : votre consentement explicite (article 9.2.a), que vous pouvez retirer à tout moment en nous écrivant.</p>
   <h2>Destinataires</h2>
   <p>L'équipe du restaurant, ainsi que nos prestataires techniques (hébergement, envoi des emails de confirmation) : [noms à compléter]. Aucune donnée n'est vendue ni utilisée à des fins publicitaires.</p>
   <h2>Durée de conservation</h2>
-  <p>[Durée à valider — proposition : 12 mois après la date de la réservation], puis suppression ou anonymisation.</p>
+  <p>La remarque (allergie, occasion…) est effacée automatiquement 30 jours après la date de la réservation.</p>
+  <p>Nom, téléphone et email sont effacés automatiquement [durée à valider — proposition : 12 mois] après la date de la réservation. Seules restent la date, l'heure et le nombre de couverts, sans lien avec votre identité, pour le suivi de l'activité du restaurant.</p>
+  <h2>Hébergement et sécurité</h2>
+  <p>Les données sont hébergées par [nom de l'hébergeur, à compléter] dans l'Union européenne [à confirmer]. Elles ne sont pas transférées hors de l'Union européenne [à confirmer selon les prestataires retenus]. Le site est servi en HTTPS ; l'espace d'administration est protégé par mot de passe ; le lien qui vous permet de gérer votre réservation est secret et n'est pas conservé en clair.</p>
   <h2>Cookies</h2>
   <p>Le site public ne dépose aucun cookie de mesure d'audience ni de publicité. Un cookie strictement nécessaire est utilisé uniquement dans l'espace d'administration réservé au restaurant. Les polices sont hébergées sur le site et le plan n'est chargé que si vous ouvrez le lien vers OpenStreetMap.</p>
   <h2>Vos droits</h2>

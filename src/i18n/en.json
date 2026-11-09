@@ -118,7 +118,7 @@
     "email": "Email",
     "note": "Note (optional)",
     "notePlaceholder": "Allergy, high chair, special occasion…",
-    "consent": "I agree that this information may be used to manage my booking.",
+    "consent": "I agree that this information, including any allergy mentioned in the note, may be used to manage my booking.",
     "privacyLink": "Privacy policy",
     "submit": "Confirm booking",
     "summary": "Summary",
@@ -151,7 +151,8 @@
     "full": "full",
     "fullLabel": "{time}, fully booked",
     "noCapacity": "No time can seat {n} guests that day. Try another date or call us.",
-    "noMore": "over"
+    "noMore": "over",
+    "noteHint": "An allergy mentioned here is used only to prepare your meal; the note is erased 30 days after your visit."
   },
   "contact": {
     "title": "Getting here",

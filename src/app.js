@@ -9,6 +9,7 @@ import { sameOrigin } from './middleware/protect.js';
 import { localize, langFromPath } from './middleware/locals.js';
 import { translator } from './i18n/index.js';
 import { render } from './render.js';
+import { logError } from './logger.js';
 
 /** @param {{ rateLimit?: boolean }} options  rateLimit : désactivé par défaut en test. */
 export function createApp({ rateLimit = config.NODE_ENV !== 'test' } = {}) {
@@ -16,6 +17,11 @@ export function createApp({ rateLimit = config.NODE_ENV !== 'test' } = {}) {
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
   app.set('strict routing', false);
+
+  // Production : tout passe en HTTPS (l'hébergeur termine TLS et transmet X-Forwarded-Proto).
+  if (config.isProd) {
+    app.use((req, res, next) => (req.secure || req.path === '/sante' ? next() : res.redirect(301, `https://${req.get('host')}${req.originalUrl}`)));
+  }
 
   app.use(helmet({
     contentSecurityPolicy: {
@@ -34,6 +40,11 @@ export function createApp({ rateLimit = config.NODE_ENV !== 'test' } = {}) {
     // mais le navigateur envoie bien l'origine sur nos propres formulaires.
     referrerPolicy: { policy: 'same-origin' },
   }));
+  // Fonctionnalités du navigateur dont le site n'a pas besoin : désactivées.
+  app.use((req, res, next) => {
+    res.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()');
+    next();
+  });
   app.use(express.static('public', { maxAge: config.isProd ? '7d' : 0, index: false }));
 
   app.get('/sante', async (_req, res) => {
@@ -60,7 +71,7 @@ export function createApp({ rateLimit = config.NODE_ENV !== 'test' } = {}) {
 
   // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, _next) => {
-    console.error(err);
+    logError(err, `${req.method} ${req.path.replace(/\/(reservation|booking)\/[^/]+/, '/$1/…')}`);
     if (res.headersSent) return;
     try {
       const lang = langFromPath(req.path);

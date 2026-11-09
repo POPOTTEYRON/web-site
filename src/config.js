@@ -13,6 +13,16 @@ const schema = z.object({
 }).refine((c) => c.MAIL_TRANSPORT !== 'smtp' || c.SMTP_URL, {
   message: 'SMTP_URL est requis quand MAIL_TRANSPORT=smtp',
   path: ['SMTP_URL'],
+}).refine((c) => c.NODE_ENV !== 'production' || c.MAIL_TRANSPORT === 'smtp', {
+  // Sinon le site afficherait « email envoyé » alors que rien ne part.
+  message: 'en production, MAIL_TRANSPORT doit valoir smtp',
+  path: ['MAIL_TRANSPORT'],
+}).refine((c) => c.NODE_ENV !== 'production' || c.PUBLIC_BASE_URL.startsWith('https://'), {
+  message: 'en production, PUBLIC_BASE_URL doit commencer par https://',
+  path: ['PUBLIC_BASE_URL'],
+}).refine((c) => c.NODE_ENV !== 'production' || !/CHANGER|^(.)\1+$/.test(c.SESSION_SECRET), {
+  message: 'SESSION_SECRET doit être une valeur aléatoire',
+  path: ['SESSION_SECRET'],
 });
 
 const parsed = schema.safeParse(process.env);

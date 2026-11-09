@@ -6,13 +6,16 @@
   <p>Ti Mango, 12 rue de la Plage, 97180 Sainte-Anne, Guadeloupe — <a href="mailto:<%= it.restaurant.email %>"><%= it.restaurant.email %></a>.</p>
   <h2>Data collected and purpose</h2>
   <p>When you book: name, phone, email, number of guests, date, time and, if you wish, a note. This data is used only to record and manage your booking (confirmation, cancellation, contacting you if something comes up).</p>
-  <p>If you mention an allergy in the note, it is used only to prepare your meal. Please share only what is useful.</p>
+  <p>An allergy mentioned in the note is health data: it is used only to prepare your meal, with the explicit consent you give by ticking the box on the form. Please share only what is useful.</p>
   <h2>Legal basis</h2>
-  <p>Steps taken at your request prior to entering into a contract (Article 6(1)(b) GDPR).</p>
+  <p>Steps taken at your request prior to entering into a contract (Article 6(1)(b) GDPR). For an allergy mentioned in the note: your explicit consent (Article 9(2)(a)), which you may withdraw at any time by writing to us.</p>
   <h2>Recipients</h2>
   <p>The restaurant team and our technical providers (hosting, sending confirmation emails): [names to be completed]. Data is never sold or used for advertising.</p>
   <h2>Retention</h2>
-  <p>[Period to be confirmed — proposed: 12 months after the booking date], then deleted or anonymised.</p>
+  <p>The note (allergy, occasion…) is automatically erased 30 days after the booking date.</p>
+  <p>Name, phone and email are automatically erased [period to be confirmed — proposed: 12 months] after the booking date. Only the date, time and number of guests remain, with no link to your identity, to monitor the restaurant's activity.</p>
+  <h2>Hosting and security</h2>
+  <p>Data is hosted by [hosting provider, to be completed] in the European Union [to be confirmed]. It is not transferred outside the European Union [to be confirmed depending on the providers chosen]. The website is served over HTTPS; the admin area is password-protected; the link that lets you manage your booking is secret and is not stored in readable form.</p>
   <h2>Cookies</h2>
   <p>The public website sets no analytics or advertising cookies. One strictly necessary cookie is used only in the restaurant's private admin area. Fonts are served by the website itself and the map only loads if you open the OpenStreetMap link.</p>
   <h2>Your rights</h2>

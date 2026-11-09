@@ -85,7 +85,7 @@
       <label class="field"><span class="field__label"><%= it.t('book.email') %></span>
         <input class="input" type="email" name="email" autocomplete="email" required maxlength="120" value="<%= it.values.email || '' %>"<%~ err('email') %>><%~ msg('email') %></label>
       <label class="field"><span class="field__label"><%= it.t('book.note') %></span>
-        <textarea class="input" name="remarque" rows="3" maxlength="500" placeholder="<%= it.t('book.notePlaceholder') %>"<%~ err('remarque') %>><%= it.values.remarque || '' %></textarea><%~ msg('remarque') %></label>
+        <textarea class="input" name="remarque" rows="3" maxlength="500" placeholder="<%= it.t('book.notePlaceholder') %>"<%~ err('remarque') %>><%= it.values.remarque || '' %></textarea><span class="hint"><%= it.t('book.noteHint') %></span><%~ msg('remarque') %></label>
       <label class="check">
         <input type="checkbox" name="consentement" value="oui" required<%~ err('consentement') %>>
         <span><%= it.t('book.consent') %> <a href="<%= it.url('privacy') %>"><%= it.t('book.privacyLink') %></a></span>

@@ -84,7 +84,7 @@ npm run donnees:demo -- --reinitialiser   # développement : ~150 réservations 
 npm run donnees:purger                    # anonymise les réservations au-delà de la durée de conservation
 ```
 
-**Conservation (RGPD)** : nom, téléphone, email et remarque sont effacés automatiquement `conservation_mois` mois après la date de la réservation (12 par défaut, à valider). Le serveur le fait au démarrage puis toutes les 24 h. L'admin peut aussi effacer à la demande les données d'une réservation passée ou annulée. Date, heure, couverts et statut sont conservés pour l'activité.
+**Conservation (RGPD)** : la remarque (qui peut contenir une allergie) est effacée 30 jours après la réservation ; nom, téléphone et email sont effacés automatiquement `conservation_mois` mois après la date de la réservation (12 par défaut, à valider). Le serveur le fait au démarrage puis toutes les 24 h. L'admin peut aussi effacer à la demande les données d'une réservation passée ou annulée. Date, heure, couverts et statut sont conservés pour l'activité.
 
 **Sauvegarde** (à planifier chez l'hébergeur) :
 
@@ -92,6 +92,10 @@ npm run donnees:purger                    # anonymise les réservations au-delà
 pg_dump --format=custom --file=timango-$(date +%F).dump "$DATABASE_URL"
 pg_restore --clean --if-exists --dbname="$DATABASE_URL" timango-AAAA-MM-JJ.dump
 ```
+
+## Sécurité et RGPD
+
+Voir [`docs/conformite.md`](docs/conformite.md) : mesures en place, registre des traitements (projet), cookies, et liste de ce qui reste à compléter ou faire valider avant la mise en ligne.
 
 ## Variables d'environnement
 
