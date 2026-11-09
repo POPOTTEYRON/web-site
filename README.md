@@ -43,7 +43,7 @@ Les tests utilisent `.env.test` (même format que `.env.example`, base `timango_
 
 ```bash
 npm test            # unitaires + intégration
-npm run test:e2e    # navigateur (Playwright/Chromium) : mobile, tablette, ordinateur
+npm run test:e2e    # navigateur (Playwright/Chromium) : parcours, clavier, accessibilité (axe), HTML, liens
 ```
 
 ## Règles métier
@@ -104,7 +104,7 @@ Voir `.env.example`. `MAIL_TRANSPORT=file` (par défaut) écrit les emails dans 
 ## Modifier le contenu
 
 - **Carte et prix** : `content/menu.json` (noms FR/EN, description, prix en euros, allergènes).
-- **Adresse, téléphone, horaires** : `content/restaurant.json`.
+- **Adresse, téléphone, horaires** : `content/restaurant.json`. Tous les textes d'horaires du site (bandeau, tableau, « réouverture… », données Google) sont calculés depuis ce fichier.
 - **Textes de l'interface** : `src/i18n/fr.json` et `src/i18n/en.json` (mêmes clés dans les deux fichiers, vérifié par les tests).
 
 Redémarrer le serveur après modification.

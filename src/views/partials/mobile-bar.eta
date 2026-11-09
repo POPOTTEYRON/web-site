@@ -1,4 +1,4 @@
-<div class="mobile-bar">
+<nav class="mobile-bar" aria-label="<%= it.t('nav.quick') %>">
   <a class="btn btn--secondary" href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.t('common.call') %></a>
   <a class="btn btn--primary" href="<%= it.url('book') %>"><%= it.t('common.bookTable') %></a>
-</div>
+</nav>

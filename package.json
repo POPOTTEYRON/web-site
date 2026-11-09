@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
+    "compression": "^1.8.2",
     "connect-pg-simple": "^10.0.0",
     "eta": "^4.6.0",
     "express": "^5.3.0",
@@ -30,6 +31,8 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "axe-core": "^4.14.0",
+    "html-validate": "^11.20.0",
     "supertest": "^7.3.2"
   }
 }

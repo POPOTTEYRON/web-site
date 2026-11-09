@@ -3,6 +3,7 @@ import { ROUTES } from '../i18n/routes.js';
 import { formatters } from '../i18n/format.js';
 import { restaurant } from '../content.js';
 import { todayStatus } from '../domain/schedule.js';
+import { hoursText } from '../domain/hours.js';
 import { config } from '../config.js';
 
 /** Variables disponibles dans toutes les vues pour une langue et une page données. */
@@ -23,6 +24,7 @@ export function localize(lang, page = null) {
     res.locals.baseUrl = config.PUBLIC_BASE_URL;
     res.locals.restaurant = restaurant;
     res.locals.status = todayStatus();
+    res.locals.hours = hoursText(lang, fmt);
     res.locals.year = new Date().getFullYear();
     next();
   };

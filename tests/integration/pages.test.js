@@ -72,9 +72,9 @@ test('réserver : un jour ouvert propose des créneaux et le formulaire de coord
   assert.match(res.text, /name="consentement"/);
 });
 
-test('réserver : avec deux champs date, la dernière valeur non vide l\'emporte', async () => {
+test('réserver : « autre date » l\'emporte sur un raccourci', async () => {
   const d = addDays(localNow().date, 3);
-  const res = await request(app).get(`/reserver?personnes=2&date=&date=${d}`);
+  const res = await request(app).get(`/reserver?personnes=2&date=${addDays(d, 1)}&autre_date=${d}`);
   assert.match(res.text, new RegExp(`name="date" value="${d}"`));
 });
 

@@ -10,7 +10,7 @@
       </address>
     </div>
     <div class="site-footer__col">
-      <p><%= it.t('common.hoursShort') %><br><%= it.t('common.closedMonday') %></p>
+      <p><%= it.hours.short %><% if (it.hours.closed) { %><br><%= it.hours.closed %><% } %></p>
     </div>
     <div class="site-footer__col">
       <p><a href="<%= it.url('legal') %>"><%= it.t('common.legal') %></a><br><a href="<%= it.url('privacy') %>"><%= it.t('common.privacy') %></a></p>

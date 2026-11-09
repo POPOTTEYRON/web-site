@@ -1,5 +1,6 @@
 import express from 'express';
 import helmet from 'helmet';
+import compression from 'compression';
 import { pool } from './db/pool.js';
 import { config } from './config.js';
 import { publicRouter } from './routes/public.js';
@@ -40,6 +41,8 @@ export function createApp({ rateLimit = config.NODE_ENV !== 'test' } = {}) {
     // mais le navigateur envoie bien l'origine sur nos propres formulaires.
     referrerPolicy: { policy: 'same-origin' },
   }));
+  app.use(compression());
+
   // Fonctionnalités du navigateur dont le site n'a pas besoin : désactivées.
   app.use((req, res, next) => {
     res.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()');

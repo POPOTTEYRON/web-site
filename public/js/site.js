@@ -64,20 +64,46 @@
     select(initial.dataset.tab, false);
   }
 
-  // --- Réservation : étape 1–2 (choix du nombre de personnes et de la date) ---
+  // --- Réservation : étapes 1–2 (personnes, date) ---
+  // Les horaires sont mis à jour dans la page, sans rechargement : le focus reste où il est
+  // (navigation au clavier aux flèches, lecteur d'écran — WCAG 3.2.2). Sans JS : bouton « Voir les horaires ».
   const pick = document.querySelector('form[data-autosubmit]');
   if (pick) {
     const other = pick.querySelector('[data-other-date]');
     const radios = [...pick.querySelectorAll('input[type=radio][name=date]')];
-    const submit = () => { if (pick.querySelector('input[name=date]:checked') || (other && other.value)) pick.requestSubmit(); };
-    pick.querySelectorAll('input[name=personnes]').forEach((r) => r.addEventListener('change', submit));
-    radios.forEach((r) => r.addEventListener('change', () => { if (other) other.value = ''; submit(); }));
-    if (other) other.addEventListener('change', () => { if (other.value) { radios.forEach((r) => { r.checked = false; }); submit(); } });
+    const status = document.querySelector('[data-slots-status]');
+    let pending = null;
+    const refresh = async () => {
+      if (!pick.querySelector('input[name=date]:checked') && !(other && other.value)) return;
+      const params = new URLSearchParams(new FormData(pick));
+      const url = `${pick.action.split('#')[0]}?${params}`;
+      pending?.abort();
+      pending = new AbortController();
+      document.querySelector('[data-swap="horaires"]')?.setAttribute('aria-busy', 'true');
+      try {
+        const res = await fetch(url, { signal: pending.signal, headers: { Accept: 'text/html' } });
+        const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+        for (const zone of document.querySelectorAll('[data-swap]')) {
+          const fresh = doc.querySelector(`[data-swap="${zone.dataset.swap}"]`);
+          if (fresh) zone.replaceWith(document.adoptNode(fresh));
+        }
+        history.replaceState(null, '', url);
+        const form = document.querySelector('form[data-validate]');
+        if (form) initBookingForm(form);
+        const n = document.querySelectorAll('input[name=heure]:not([disabled])').length;
+        if (status) status.textContent = n ? status.dataset.msgSome.replace('{n}', n) : status.dataset.msgNone;
+      } catch (err) {
+        if (err.name !== 'AbortError') pick.submit(); // repli : rechargement classique
+      }
+    };
+    pick.querySelectorAll('input[name=personnes]').forEach((r) => r.addEventListener('change', refresh));
+    radios.forEach((r) => r.addEventListener('change', () => { if (other) other.value = ''; refresh(); }));
+    if (other) other.addEventListener('change', () => { if (other.value) { radios.forEach((r) => { r.checked = false; }); refresh(); } });
+    pick.addEventListener('submit', (e) => { e.preventDefault(); refresh(); });
   }
 
   // --- Réservation : étapes 3–4 (heure, coordonnées) ---
-  const form = document.querySelector('form[data-validate]');
-  if (form) {
+  function initBookingForm(form) {
     const msg = form.dataset;
     // Plus strict que le navigateur : exige un domaine avec extension (nom@domaine.fr).
     const EMAIL = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[^\s@.]{2,}$/;
@@ -106,7 +132,7 @@
       const box = holder(el);
       clearError(box);
       if (!text) return;
-      const p = document.createElement('p');
+      const p = document.createElement('span');
       p.className = 'field-error';
       p.id = `err-${el.name}`;
       p.textContent = text;
@@ -153,6 +179,8 @@
       }
     });
   }
+  const bookingForm = document.querySelector('form[data-validate]');
+  if (bookingForm) initBookingForm(bookingForm);
 })();
 
 // Retour arrière (cache du navigateur) : réactiver le bouton d'envoi.

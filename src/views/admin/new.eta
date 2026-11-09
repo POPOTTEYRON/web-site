@@ -2,7 +2,7 @@
 <h1 class="h2">Nouvelle réservation</h1>
 <p class="muted">Réservation prise par téléphone. Limite : capacité de la salle. Si un email est saisi, le client reçoit la confirmation et un lien d'annulation.</p>
 <% const v = it.values; const e = it.errors; %>
-<% const err = (f) => e[f] ? `<p class="field-error" id="err-${f}">${it.msg(e[f])}</p>` : ''; %>
+<% const err = (f) => e[f] ? `<span class="field-error" id="err-${f}">${it.msg(e[f])}</span>` : ''; %>
 <% const aria = (f) => e[f] ? ` aria-invalid="true" aria-describedby="err-${f}"` : ''; %>
 <form method="post" action="/admin/nouvelle" class="admin-form" novalidate>
   <input type="hidden" name="_csrf" value="<%= it.csrf %>">

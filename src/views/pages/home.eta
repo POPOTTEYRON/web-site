@@ -16,7 +16,7 @@
 <section class="infobar" aria-label="<%= it.t('home.infoLabel') %>">
   <dl class="wrap infobar__inner">
     <div><dt><%= it.t('common.address') %></dt><dd><a href="<%= it.restaurant.carteOsm %>" rel="noopener"><%= it.restaurant.adresse.rue %>, <%= it.restaurant.adresse.codePostal %> <%= it.restaurant.adresse.ville %></a></dd></div>
-    <div><dt><%= it.t('common.hours') %></dt><dd><%= it.t('common.hoursLine') %></dd></div>
+    <div><dt><%= it.t('common.hours') %></dt><dd><%= it.hours.line %></dd></div>
     <div><dt><%= it.t('common.phone') %></dt><dd><a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></dd></div>
   </dl>
 </section>

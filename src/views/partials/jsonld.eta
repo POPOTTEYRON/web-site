@@ -2,7 +2,7 @@
   '@context': 'https://schema.org', '@type': 'Restaurant',
   name: it.restaurant.nom, servesCuisine: 'Créole', telephone: it.restaurant.telephoneE164, email: it.restaurant.email,
   address: { '@type': 'PostalAddress', streetAddress: it.restaurant.adresse.rue, postalCode: it.restaurant.adresse.codePostal, addressLocality: it.restaurant.adresse.ville, addressRegion: it.restaurant.adresse.region, addressCountry: it.restaurant.adresse.pays },
-  openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], opens: '11:30', closes: '22:00' }],
+  openingHoursSpecification: it.openingHoursSchema,
   hasMenu: it.baseUrl + it.url('menu'),
   acceptsReservations: true,
 }).replace(/</g, '\\u003c') %></script>

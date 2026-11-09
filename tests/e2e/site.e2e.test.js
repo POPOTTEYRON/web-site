@@ -199,3 +199,31 @@ test('parcours restaurateur : connexion, ajout téléphone, statut, réglage, fe
   assert.deepEqual(errors.filter((e) => !/status of 409/.test(e)), []);
   await ctx.close();
 });
+
+test('réservation au clavier : les flèches ne rechargent pas la page, le focus reste en place (WCAG 3.2.2)', async () => {
+  const { ctx, page, errors } = await open();
+  await page.goto(base + '/reserver');
+  let loads = 0;
+  page.on('load', () => { loads += 1; });
+  // Personnes : focus sur « 2 », flèche droite → 3
+  await page.locator('input[name=personnes][value="2"]').focus();
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await page.evaluate(() => document.activeElement.value), '3');
+  // Date : focus sur un jour ouvert, flèche droite → jour suivant ouvert ; les horaires apparaissent
+  const first = page.locator('.day-strip input[name=date]:not([disabled])').nth(1);
+  await first.focus();
+  await page.keyboard.press('Space');
+  await page.locator('input[name=heure]').first().waitFor();
+  assert.equal(await page.evaluate(() => document.activeElement.name), 'date', 'le focus n\'a pas bougé');
+  await page.keyboard.press('ArrowRight');
+  await page.waitForFunction((v) => new URL(location.href).searchParams.get('date') !== v, await first.getAttribute('value'));
+  assert.equal(await page.evaluate(() => document.activeElement.name), 'date');
+  assert.match(page.url(), /personnes=3/);
+  assert.match(await page.locator('[data-slots-status]').textContent(), /horaires disponibles/);
+  assert.equal(loads, 0, 'aucun rechargement de page');
+  // Le formulaire mis à jour reste validé côté client
+  await page.getByRole('button', { name: 'Confirmer la réservation' }).click();
+  assert.equal(await page.locator('[data-error-summary]').isVisible(), true);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});

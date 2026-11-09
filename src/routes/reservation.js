@@ -53,8 +53,9 @@ export function reservationRouter({ rateLimit }) {
     router.get(ROUTES.book[lang], localize(lang, 'book'), async (req, res, next) => {
       try {
         const raw = req.query.personnes ?? req.query.guests;
-        const dates = [].concat(req.query.date ?? []).filter((d) => typeof d === 'string' && d !== '');
-        const date = dates.length ? dates[dates.length - 1] : null;
+        // « Autre date » (champ libre) prime sur les raccourcis des 7 prochains jours.
+        const pickOne = (v) => [].concat(v ?? []).filter((d) => typeof d === 'string' && d !== '').at(-1);
+        const date = pickOne(req.query.autre_date) ?? pickOne(req.query.date) ?? null;
         const data = await bookingPage({ party: raw === undefined ? 2 : Number(raw), date });
         render(res, 'pages/book', { ...data, noindex: Boolean(date) });
       } catch (err) { next(err); }

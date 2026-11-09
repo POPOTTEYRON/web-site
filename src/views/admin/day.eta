@@ -30,7 +30,7 @@
     <% if (r.anonymise_le) { %>
     <p class="resa__who muted">Données personnelles effacées</p>
     <% } else { %>
-    <p class="resa__who"><%= r.nom %> · <a href="tel:<%= r.telephone.replace(/[^0-9+]/g, '') %>"><%= r.telephone %></a><% if (r.email) { %> · <a href="mailto:<%= r.email %>"><%= r.email %></a><% } %></p>
+    <p class="resa__who"><%= r.nom %> · <a href="tel:<%= r.telephone.replace(/[^0-9+]/g, '') %>"><%= r.telephone.replace(/ /g, '\u00A0') %></a><% if (r.email) { %> · <a href="mailto:<%= r.email %>"><%= r.email %></a><% } %></p>
     <% } %>
     <p class="resa__meta"><%= r.source === 'telephone' ? 'Prise par téléphone' : 'En ligne' %> · réf. <%= r.reference %><% if (r.langue === 'en') { %> · EN<% } %></p>
     <% if (r.remarque) { %><p class="resa__note"><strong>Remarque :</strong> <%= r.remarque %></p><% } %>

@@ -12,15 +12,15 @@
     "book": "Réserver",
     "open": "Menu",
     "close": "Fermer",
-    "lang": "Langue",
-    "switchTo": "English version"
+    "switchTo": "English version",
+    "quick": "Accès rapide"
   },
   "status": {
     "openNow": "Ouvert maintenant",
     "openToday": "Ouvert aujourd'hui",
     "closedNow": "Fermé maintenant",
     "closedToday": "Fermé aujourd'hui",
-    "reopens": "réouverture mardi à 11h30"
+    "reopens": "réouverture {day} à {time}"
   },
   "common": {
     "bookTable": "Réserver une table",
@@ -31,13 +31,7 @@
     "address": "Adresse",
     "hours": "Horaires",
     "phone": "Téléphone",
-    "email": "Email",
-    "monday": "Lundi",
-    "tueSun": "Mardi – dimanche",
     "closed": "Fermé",
-    "hoursLine": "Du mardi au dimanche, 11h30 – 22h · fermé le lundi",
-    "hoursShort": "Mar – dim · 11h30 – 22h",
-    "closedMonday": "Fermé le lundi",
     "takeaway": "Envie d'emporter ?",
     "takeawayCta": "Commandez par téléphone au",
     "tempPhoto": "Illustration temporaire",
@@ -126,7 +120,7 @@
       "invalid": "Date invalide.",
       "past": "Cette date est passée.",
       "too_far": "Les réservations sont ouvertes jusqu'à {days} jours à l'avance.",
-      "closed": "Le restaurant est fermé ce jour-là (fermeture le lundi).",
+      "closed": "Le restaurant est fermé ce jour-là.",
       "party": "Choisissez entre 1 et {max} personnes.",
       "required": "Ce champ est obligatoire.",
       "email": "Adresse email invalide (ex. nom@domaine.fr).",
@@ -146,18 +140,16 @@
       "rate": "Trop de tentatives. Réessayez dans quelques minutes ou appelez-nous.",
       "duplicate": "Vous avez déjà une réservation à cette date et à cette heure. Vérifiez vos emails ou appelez-nous."
     },
-    "unavailableTitle": "Réservation en ligne bientôt disponible",
-    "unavailableText": "L'enregistrement des réservations n'est pas encore activé sur ce site de démonstration. Aucune réservation n'a été créée. Pour réserver, appelez-nous au",
-    "full": "complet",
     "fullLabel": "{time}, complet",
     "noCapacity": "Aucun horaire ne peut accueillir {n} personnes ce jour-là. Essayez une autre date ou appelez-nous.",
     "noMore": "terminé",
-    "noteHint": "Une allergie indiquée ici sert uniquement à préparer votre repas ; la remarque est effacée 30 jours après votre venue."
+    "noteHint": "Une allergie indiquée ici sert uniquement à préparer votre repas ; la remarque est effacée 30 jours après votre venue.",
+    "slotsAvailable": "{n} horaires disponibles.",
+    "slotsNone": "Aucun horaire disponible."
   },
   "contact": {
     "title": "Accès & contact",
-    "lead": "Au cœur de Sainte-Anne, à deux pas de la plage.",
-    "writeUs": "Écrivez-nous",
+    "lead": "Toutes les informations pour venir et nous joindre.",
     "mapNote": "Le plan interactif n'est pas chargé automatiquement afin de ne transmettre aucune donnée à un service tiers sans votre accord."
   },
   "legal": {
@@ -198,7 +190,6 @@
     "cancel": "Annuler la réservation",
     "cancelQuestion": "Voulez-vous vraiment annuler cette réservation ?",
     "cancelConfirm": "Oui, annuler",
-    "cancelled": "Cette réservation est annulée.",
     "cancelledNow": "Votre réservation est annulée.",
     "cancelEmail": "Un email de confirmation d'annulation vous a été envoyé.",
     "past": "L'heure de cette réservation est passée.",

@@ -16,7 +16,7 @@
         </label>
         <% } %>
       </div>
-      <% if (it.partyError) { %><p class="field-error" role="alert"><%= it.t('book.errors.party', { max: it.maxParty }) %></p><% } %>
+      <div data-swap="erreur-personnes"><% if (it.partyError) { %><p class="field-error" role="alert"><%= it.t('book.errors.party', { max: it.maxParty }) %></p><% } %></div>
       <p class="hint"><%= it.t('book.groupCall', { max: it.maxParty }) %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
     </fieldset>
 
@@ -37,13 +37,15 @@
       <% const inStrip = it.days.some((d) => d.date === it.date); %>
       <label class="field field--inline">
         <span class="field__label"><%= it.t('book.otherDate') %></span>
-        <input class="input" type="date" name="date" min="<%= it.minDate %>" max="<%= it.maxDate %>" value="<%= it.date && !inStrip ? it.date : '' %>" data-other-date>
+        <input class="input" type="date" name="autre_date" min="<%= it.minDate %>" max="<%= it.maxDate %>" value="<%= it.date && !inStrip ? it.date : '' %>" data-other-date>
       </label>
-      <% if (it.dateError) { %><p class="field-error" role="alert"><%= it.t('book.errors.' + it.dateError, { days: it.maxDaysAhead }) %></p><% } %>
+      <div data-swap="erreur-date"><% if (it.dateError) { %><p class="field-error" role="alert"><%= it.t('book.errors.' + it.dateError, { days: it.maxDaysAhead }) %></p><% } %></div>
     </fieldset>
     <button class="btn btn--secondary" type="submit" data-hide-js><%= it.t('book.showSlots') %></button>
   </form>
 
+  <p class="visually-hidden" role="status" data-slots-status data-msg-some="<%= it.t('book.slotsAvailable') %>" data-msg-none="<%= it.t('book.slotsNone') %>"></p>
+  <div data-swap="horaires">
   <% if (it.ready) { %>
   <form class="booking__form" method="post" action="<%= it.url('book') %>" id="etape-heure" novalidate data-validate
     data-msg-required="<%= it.t('book.errors.required') %>" data-msg-email="<%= it.t('book.errors.email') %>"
@@ -77,7 +79,7 @@
     <fieldset class="field-group">
       <legend class="field-group__legend"><%= it.t('book.step4') %></legend>
       <% const err = (f) => it.errors[f] ? ` aria-invalid="true" aria-describedby="err-${f}"` : ''; %>
-      <% const msg = (f) => it.errors[f] ? `<p class="field-error" id="err-${f}">${it.t('book.errors.' + it.errors[f])}</p>` : ''; %>
+      <% const msg = (f) => it.errors[f] ? `<span class="field-error" id="err-${f}">${it.t('book.errors.' + it.errors[f])}</span>` : ''; %>
       <label class="field"><span class="field__label"><%= it.t('book.name') %></span>
         <input class="input" type="text" name="nom" autocomplete="name" required maxlength="80" value="<%= it.values.nom || '' %>"<%~ err('nom') %>><%~ msg('nom') %></label>
       <label class="field"><span class="field__label"><%= it.t('book.phone') %></span>
@@ -102,4 +104,5 @@
     <% } %>
   </form>
   <% } %>
+  </div>
 </div>
