@@ -1,5 +1,6 @@
 <% layout('/admin/layout', it) %>
 <% const FLASH = { reglages: 'Réglages enregistrés.', fermeture: 'Fermeture enregistrée.', fermeture_supprimee: 'Fermeture supprimée.' }; %>
+<% if (it.flash === 'fermeture_annulations') { %><p class="notice" role="status">Fermeture enregistrée. <%= it.flashN %> réservation(s) annulée(s), <%= it.flashNotified %> client(s) prévenu(s) par email<%= it.flashN > it.flashNotified ? ' — appelez les autres (réservations sans email ou envoi en échec)' : '' %>.</p><% } %>
 <% if (it.flash && FLASH[it.flash]) { %><p class="notice" role="status"><%= FLASH[it.flash] %></p><% } %>
 <h1 class="h2">Réglages des réservations</h1>
 <% const v = it.values; const e = it.errors; %>
@@ -41,8 +42,18 @@
   <% } %>
 </ul>
 <% const ce = it.closureErrors; %>
-<form method="post" action="/admin/fermetures" class="admin-form admin-form--inline" novalidate>
+<form method="post" action="/admin/fermetures" class="admin-form admin-form--inline" novalidate id="fermeture">
   <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+  <% if (it.closureConflict) { %>
+  <div class="notice notice--error" role="alert">
+    <p><strong><%= it.closureConflict.length %> réservation(s) confirmée(s)</strong> ce jour-là :</p>
+    <ul class="conflict-list">
+      <% for (const r of it.closureConflict) { %><li><%= it.fmt.time(r.heure) %> — <%= r.personnes %> pers. — <%= r.nom %> (<%= r.telephone %>)<%= r.email ? '' : ' — pas d\'email : à appeler' %></li><% } %>
+    </ul>
+    <label class="check"><input type="checkbox" name="annuler_reservations" value="oui" required>
+      <span>Annuler ces réservations et prévenir les clients par email</span></label>
+  </div>
+  <% } %>
   <label class="field"><span class="field__label">Date</span><input class="input" type="date" name="date" required value="<%= it.closureValues.date || '' %>"><% if (ce.date) { %><p class="field-error"><%= it.msg(ce.date) %></p><% } %></label>
   <label class="field"><span class="field__label">Motif (facultatif)</span><input class="input" type="text" name="motif" maxlength="120" value="<%= it.closureValues.motif || '' %>"></label>
   <button class="btn btn--secondary" type="submit">Ajouter la fermeture</button>

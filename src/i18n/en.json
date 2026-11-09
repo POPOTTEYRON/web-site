@@ -60,7 +60,7 @@
     "restaurantText": "Ti Mango takes a modern approach to traditional Caribbean cooking: everything is made in-house from fresh, local produce, and every plate is carefully presented.",
     "restaurantMore": "Discover the restaurant and gallery",
     "bookTitle": "Book your table",
-    "bookText": "Online, in a minute. For groups of more than 8, please call us.",
+    "bookText": "Online, in a minute. For large groups, please call us.",
     "findUs": "Find us"
   },
   "menu": {
@@ -106,7 +106,7 @@
     "step3": "3. Arrival time",
     "step4": "4. Your details",
     "people": "{n}",
-    "groupCall": "More than 8 guests? Call us on",
+    "groupCall": "More than {max} guests? Call us on",
     "today": "Today",
     "closed": "closed",
     "otherDate": "Other date",
@@ -125,9 +125,9 @@
     "errors": {
       "invalid": "Invalid date.",
       "past": "This date has passed.",
-      "too_far": "Bookings open up to 60 days ahead.",
+      "too_far": "Bookings open up to {days} days ahead.",
       "closed": "The restaurant is closed that day (closed on Mondays).",
-      "party": "Choose between 1 and 8 guests.",
+      "party": "Choose between 1 and {max} guests.",
       "required": "This field is required.",
       "email": "Invalid email address (e.g. name@domain.com).",
       "phone": "Invalid phone number.",
@@ -143,13 +143,15 @@
       "range": "Value out of range.",
       "int": "Invalid value.",
       "bot": "The request could not be processed.",
-      "rate": "Too many attempts. Please try again in a few minutes or call us."
+      "rate": "Too many attempts. Please try again in a few minutes or call us.",
+      "duplicate": "You already have a booking at this date and time. Please check your emails or call us."
     },
     "unavailableTitle": "Online booking coming soon",
     "unavailableText": "Saving bookings is not yet enabled on this demo website. No booking has been made. To book, please call us on",
     "full": "full",
     "fullLabel": "{time}, fully booked",
-    "noCapacity": "No time can seat {n} guests that day. Try another date or call us."
+    "noCapacity": "No time can seat {n} guests that day. Try another date or call us.",
+    "noMore": "over"
   },
   "contact": {
     "title": "Getting here",

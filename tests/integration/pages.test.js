@@ -59,6 +59,7 @@ test('réserver : une date passée est refusée', async () => {
 test('réserver : un nombre de personnes hors limites est signalé', async () => {
   const res = await request(app).get('/reserver?personnes=12');
   assert.match(res.text, /entre 1 et 8 personnes/);
+  assert.match(res.text, /Plus de 8 personnes/);
 });
 
 test('réserver : un jour ouvert propose des créneaux et le formulaire de coordonnées', async () => {

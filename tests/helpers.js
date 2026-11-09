@@ -25,9 +25,23 @@ export function nextMonday() {
   return d;
 }
 
+let seq = 0;
+/** Données d'une réservation valide ; email unique par appel (sinon : refus pour doublon). */
 export const booking = (over = {}) => ({
   personnes: '2', date: openDay(), heure: '19:30', nom: 'Client Démo', telephone: '0690 00 00 00',
-  email: 'client@exemple.fr', remarque: '', consentement: 'oui', ...over,
+  email: `client${++seq}@exemple.fr`, remarque: '', consentement: 'oui', ...over,
 });
 
 export { outbox };
+
+/** Insère directement une réservation (dates passées ou du jour, impossibles par le formulaire). */
+export async function insertBooking(over = {}) {
+  const r = { reference: `T${String(++seq).padStart(7, '0')}`, date: localNow().date, heure: '12:00', personnes: 2,
+    nom: 'Client Direct', telephone: '0690000000', email: null, source: 'telephone', statut: 'confirmee', ...over };
+  const cols = Object.keys(r);
+  const { rows } = await pool.query(
+    `INSERT INTO reservations (${cols.join(',')}) VALUES (${cols.map((_, i) => `$${i + 1}`).join(',')}) RETURNING id, date`,
+    Object.values(r),
+  );
+  return rows[0];
+}

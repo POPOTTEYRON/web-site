@@ -52,6 +52,8 @@ export async function createOnlineBooking(input, lang, now = new Date()) {
     if (problem) throw new BookingError(problem, 'date');
     if (input.personnes > rules.maxPartyOnline) throw new BookingError('party', 'personnes');
     if (!slotsFor(input.date, now, rules, closures).includes(input.heure)) throw new BookingError('slot_gone', 'heure');
+    // Double envoi (double-clic, retour arrière, renvoi du formulaire) : une seule réservation.
+    if (await repo.findDuplicate(input, db)) throw new BookingError('duplicate', 'heure');
     const bookings = await repo.activeBookings(input.date, db);
     if (!fits(bookings, input.heure, input.personnes, rules.capacityOnline, rules.tableDurationMin)) {
       throw new BookingError('full', 'heure');
@@ -119,13 +121,47 @@ export const ADMIN_TRANSITIONS = {
   annulee_restaurant: ['confirmee'],
 };
 
-export async function changeStatusByAdmin(id, statut) {
-  const from = ADMIN_TRANSITIONS[statut];
-  if (!from) throw new BookingError('bad_status');
-  const updated = await repo.setStatus(id, statut, from);
+/**
+ * Actions possibles sur une réservation selon son statut ET sa date :
+ * - « honorée / absent / rétablir » seulement le jour même ou après (on ne constate pas une venue future) ;
+ * - « annuler » seulement si l'heure n'est pas passée (sinon le client recevrait un email absurde).
+ */
+export function allowedAdminActions(r, now = new Date()) {
+  const today = localNow(now).date;
+  return Object.entries(ADMIN_TRANSITIONS)
+    .filter(([target, from]) => from.includes(r.statut))
+    .filter(([target]) => (target === 'annulee_restaurant' ? isUpcoming(r, now) : r.date <= today))
+    .map(([target]) => target);
+}
+
+export async function changeStatusByAdmin(id, statut, now = new Date()) {
+  if (!ADMIN_TRANSITIONS[statut]) throw new BookingError('bad_status');
+  const r = await repo.findById(id);
+  if (!r || !allowedAdminActions(r, now).includes(statut)) return { status: 'refused' };
+  const updated = await repo.setStatus(id, statut, ADMIN_TRANSITIONS[statut]);
   if (!updated) return { status: 'refused' };
   const emailSent = statut === 'annulee_restaurant' ? await trySend(cancellationEmail(updated, 'restaurant')) : false;
   return { status: 'ok', reservation: updated, emailSent };
+}
+
+/**
+ * Fermeture exceptionnelle. S'il reste des réservations confirmées ce jour-là, la fermeture est refusée
+ * sauf demande explicite d'annulation : elles sont alors annulées et chaque client est prévenu par email.
+ */
+export async function addClosure({ date, motif }, { cancelBookings = false } = {}) {
+  const result = await transaction(async (db) => {
+    await repo.lockDate(date, db);
+    const confirmed = await repo.confirmedForDate(date, db);
+    if (confirmed.length && !cancelBookings) return { status: 'has_bookings', bookings: confirmed };
+    await repo.addClosure({ date, motif }, db);
+    const cancelled = [];
+    for (const r of confirmed) cancelled.push(await repo.setStatus(r.id, 'annulee_restaurant', ['confirmee'], db));
+    return { status: 'ok', cancelled };
+  });
+  if (result.status !== 'ok') return result;
+  let notified = 0;
+  for (const r of result.cancelled) if (await trySend(cancellationEmail(r, 'restaurant'))) notified += 1;
+  return { status: 'ok', cancelled: result.cancelled.length, notified };
 }
 
 export { pool };

@@ -35,7 +35,7 @@
     <p class="resa__meta"><%= r.source === 'telephone' ? 'Prise par téléphone' : 'En ligne' %> · réf. <%= r.reference %><% if (r.langue === 'en') { %> · EN<% } %></p>
     <% if (r.remarque) { %><p class="resa__note"><strong>Remarque :</strong> <%= r.remarque %></p><% } %>
     <p><span class="badge badge--<%= r.statut %>"><%= it.t('manage.status.' + r.statut) %></span></p>
-    <% const actions = [['honoree', 'Honorée'], ['absent', 'Absent'], ['confirmee', 'Rétablir'], ['annulee_restaurant', 'Annuler']].filter(([s]) => it.transitions[s].includes(r.statut)); %>
+    <% const allowed = it.actionsFor(r); const actions = [['honoree', 'Honorée'], ['absent', 'Absent'], ['confirmee', 'Rétablir'], ['annulee_restaurant', 'Annuler']].filter(([s]) => allowed.includes(s)); %>
     <% if (actions.length) { %>
     <div class="resa__actions">
       <% for (const [s, l] of actions) { %>

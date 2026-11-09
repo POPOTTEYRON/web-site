@@ -9,7 +9,7 @@ import { localNow, addDays, isValidDate, openingHours, toMinutes, toHHMM } from 
 import { cutoffDate } from '../services/retention.js';
 import { peakOccupancy } from '../domain/availability.js';
 import { adminBookingSchema, settingsSchema, closureSchema, fieldErrors } from '../validation.js';
-import { createAdminBooking, changeStatusByAdmin, BookingError, ADMIN_TRANSITIONS } from '../services/reservations.js';
+import { createAdminBooking, changeStatusByAdmin, BookingError, allowedAdminActions, addClosure } from '../services/reservations.js';
 
 // Empreinte factice : on vérifie toujours un mot de passe, même pour un email inconnu (temps de réponse constant).
 const DUMMY_HASH = await hash('mot-de-passe-factice-pour-temps-constant');
@@ -92,7 +92,7 @@ export function adminRouter({ rateLimit }) {
         prev: addDays(date, -1), next: addDays(date, 1),
         lunch: rows.filter((r) => r.heure < '16:00'), dinner: rows.filter((r) => r.heure >= '16:00'),
         totals: { reservations: active.length, couverts: active.reduce((s, r) => s + r.personnes, 0) },
-        peak, rules, closed: !hours, closure: closures[0] ?? null, transitions: ADMIN_TRANSITIONS,
+        peak, rules, closed: !hours, closure: closures[0] ?? null, actionsFor: (r) => allowedAdminActions(r),
         flash: req.query.ok ?? null,
       });
     } catch (err) { next(err); }
@@ -166,11 +166,13 @@ export function adminRouter({ rateLimit }) {
     const [row, closures] = await Promise.all([repo.getSettingsRow(), repo.getClosures(today, addDays(today, 365))]);
     render(res, 'admin/settings', {
       title: 'Réglages', section: 'reglages', values: row, errors: {}, closures, closureValues: {}, closureErrors: {}, flash: null,
-      cutoff: cutoffDate(today, row.conservation_mois), ...extra,
+      cutoff: cutoffDate(today, row.conservation_mois), closureConflict: null, ...extra,
     }, status);
   };
 
-  router.get('/admin/reglages', (req, res, next) => settingsPage(res, { flash: req.query.ok ?? null }).catch(next));
+  router.get('/admin/reglages', (req, res, next) => settingsPage(res, {
+    flash: req.query.ok ?? null, flashN: Number(req.query.n) || 0, flashNotified: Number(req.query.prevenus) || 0,
+  }).catch(next));
 
   router.post('/admin/reglages', async (req, res, next) => {
     try {
@@ -186,8 +188,12 @@ export function adminRouter({ rateLimit }) {
       const parsed = closureSchema.safeParse(req.body);
       if (!parsed.success) return settingsPage(res, { closureValues: req.body, closureErrors: fieldErrors(parsed.error) }, 422);
       if (parsed.data.date < localNow().date) return settingsPage(res, { closureValues: req.body, closureErrors: { date: 'past' } }, 422);
-      await repo.addClosure(parsed.data);
-      res.redirect(303, '/admin/reglages?ok=fermeture');
+      const result = await addClosure(parsed.data, { cancelBookings: req.body.annuler_reservations === 'oui' });
+      if (result.status === 'has_bookings') {
+        return settingsPage(res, { closureValues: req.body, closureConflict: result.bookings }, 409);
+      }
+      const ok = result.cancelled ? `fermeture_annulations&n=${result.cancelled}&prevenus=${result.notified}` : 'fermeture';
+      res.redirect(303, `/admin/reglages?ok=${ok}`);
     } catch (err) { next(err); }
   });
 

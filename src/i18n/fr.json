@@ -60,7 +60,7 @@
     "restaurantText": "Ti Mango revisite la cuisine antillaise traditionnelle avec une approche moderne : tout est fait maison, à partir de produits frais et locaux, et chaque assiette est présentée avec soin.",
     "restaurantMore": "Découvrir le restaurant et la galerie",
     "bookTitle": "Réservez votre table",
-    "bookText": "En ligne, en une minute. Pour un groupe de plus de 8 personnes, appelez-nous.",
+    "bookText": "En ligne, en une minute. Pour un grand groupe, appelez-nous.",
     "findUs": "Nous trouver"
   },
   "menu": {
@@ -106,7 +106,7 @@
     "step3": "3. Heure d'arrivée",
     "step4": "4. Vos coordonnées",
     "people": "{n} pers.",
-    "groupCall": "Plus de 8 personnes ? Appelez-nous au",
+    "groupCall": "Plus de {max} personnes ? Appelez-nous au",
     "today": "Aujourd'hui",
     "closed": "fermé",
     "otherDate": "Autre date",
@@ -125,9 +125,9 @@
     "errors": {
       "invalid": "Date invalide.",
       "past": "Cette date est passée.",
-      "too_far": "Les réservations sont ouvertes jusqu'à 60 jours à l'avance.",
+      "too_far": "Les réservations sont ouvertes jusqu'à {days} jours à l'avance.",
       "closed": "Le restaurant est fermé ce jour-là (fermeture le lundi).",
-      "party": "Choisissez entre 1 et 8 personnes.",
+      "party": "Choisissez entre 1 et {max} personnes.",
       "required": "Ce champ est obligatoire.",
       "email": "Adresse email invalide (ex. nom@domaine.fr).",
       "phone": "Numéro de téléphone invalide.",
@@ -143,13 +143,15 @@
       "range": "Valeur hors limites.",
       "int": "Valeur invalide.",
       "bot": "La demande n'a pas pu être traitée.",
-      "rate": "Trop de tentatives. Réessayez dans quelques minutes ou appelez-nous."
+      "rate": "Trop de tentatives. Réessayez dans quelques minutes ou appelez-nous.",
+      "duplicate": "Vous avez déjà une réservation à cette date et à cette heure. Vérifiez vos emails ou appelez-nous."
     },
     "unavailableTitle": "Réservation en ligne bientôt disponible",
     "unavailableText": "L'enregistrement des réservations n'est pas encore activé sur ce site de démonstration. Aucune réservation n'a été créée. Pour réserver, appelez-nous au",
     "full": "complet",
     "fullLabel": "{time}, complet",
-    "noCapacity": "Aucun horaire ne peut accueillir {n} personnes ce jour-là. Essayez une autre date ou appelez-nous."
+    "noCapacity": "Aucun horaire ne peut accueillir {n} personnes ce jour-là. Essayez une autre date ou appelez-nous.",
+    "noMore": "terminé"
   },
   "contact": {
     "title": "Accès & contact",

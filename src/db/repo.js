@@ -130,3 +130,19 @@ export async function anonymizeBefore(before, db = pool) {
   );
   return rowCount;
 }
+
+/** Réservation active identique (même email, date et heure) : détection des doubles envois. */
+export async function findDuplicate({ email, date, heure }, db = pool) {
+  const { rows } = await db.query(
+    `SELECT id FROM reservations WHERE email = $1 AND date = $2 AND heure = $3
+       AND statut = ANY($4::statut_reservation[]) LIMIT 1`,
+    [email, date, heure, ACTIVE_STATUSES],
+  );
+  return rows.length > 0;
+}
+
+/** Réservations encore confirmées d'une date (à prévenir en cas de fermeture). */
+export async function confirmedForDate(date, db = pool) {
+  const { rows } = await db.query(`SELECT ${COLUMNS} FROM reservations WHERE date = $1 AND statut = 'confirmee' ORDER BY heure`, [date]);
+  return rows;
+}

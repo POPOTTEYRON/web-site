@@ -46,6 +46,25 @@ npm test            # unitaires + intégration
 npm run test:e2e    # navigateur (Playwright/Chromium) : mobile, tablette, ordinateur
 ```
 
+## Règles métier
+
+| Règle | Valeur par défaut (modifiable dans Admin › Réglages) |
+|---|---|
+| Couverts réservables en ligne, simultanément | 36 (les 6 autres restent pour les clients sans réservation) |
+| Capacité de la salle (réservations saisies par le restaurant) | 42 |
+| Durée d'occupation d'une table | 1 h 30 |
+| Créneaux | toutes les 30 min, de l'ouverture jusqu'à fermeture − durée d'une table (11h30 → 20h30) |
+| Groupe maximum en ligne | 8 (au-delà : téléphone) |
+| Délai minimum (jour même) | 1 h |
+| Horizon | 60 jours |
+
+- Une réservation identique (même email, date, heure) n'est créée qu'une fois (double-clic, renvoi du formulaire).
+- Le client peut annuler par son lien jusqu'à l'heure de la réservation ; les couverts sont libérés immédiatement.
+- « Honorée », « Absent », « Rétablir » : seulement le jour même ou après. « Annuler » (restaurant) : seulement avant l'heure ; le client est prévenu par email. Une réservation annulée ne se rétablit pas.
+- Un statut « absent » libère les couverts ; « honorée » les occupe.
+- Fermeture exceptionnelle sur un jour déjà réservé : refusée tant que le restaurateur ne coche pas « annuler et prévenir » ; les clients sans email sont listés pour être appelés.
+- Changer un réglage ne modifie jamais les réservations existantes ; il s'applique aux nouvelles.
+
 ## Base de données
 
 Migrations SQL versionnées dans `src/db/migrations/` (appliquées dans l'ordre, chacune dans une transaction) :

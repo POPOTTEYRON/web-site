@@ -59,3 +59,28 @@ test('raccourcis de dates : 7 jours, lundi marqué fermé', () => {
   assert.equal(days[1].closed, true);
   assert.equal(days.filter((d) => d.closed).length, 1);
 });
+
+test('minuit en Guadeloupe : 03h59 UTC est encore la veille', () => {
+  assert.deepEqual(localNow(at('2026-11-11T03:59:00Z')), { date: '2026-11-10', minutes: 23 * 60 + 59 });
+  assert.deepEqual(localNow(at('2026-11-11T04:00:00Z')), { date: '2026-11-11', minutes: 0 });
+  // À 23h59 un mardi : plus de créneau ce jour-là, le mercredi est complet
+  assert.deepEqual(slotsFor('2026-11-10', at('2026-11-11T03:59:00Z')), []);
+  assert.equal(slotsFor('2026-11-11', at('2026-11-11T03:59:00Z')).length, 19);
+  assert.equal(dateProblem('2026-11-10', at('2026-11-11T04:00:00Z')), 'past');
+});
+
+test('changement d\'année et année bissextile', () => {
+  assert.equal(addDays('2027-12-31', 1), '2028-01-01');
+  assert.equal(addDays('2028-02-28', 1), '2028-02-29');
+  assert.equal(isValidDate('2027-02-29'), false);
+  assert.equal(isValidDate('2028-02-29'), true);
+  // 31 décembre 2026 (jeudi) à 20h locale → horizon de 60 jours jusqu'au 1er mars 2027
+  const now = at('2027-01-01T00:00:00Z');
+  assert.equal(dateProblem('2027-03-01', now), 'closed'); // lundi, mais dans l'horizon (pas too_far)
+  assert.equal(dateProblem('2027-03-02', now), 'too_far');
+});
+
+test('délai minimum exactement à la limite : 18h30 + 60 min autorise 19h30', () => {
+  const slots = slotsFor('2026-11-10', at('2026-11-10T22:30:00Z')); // 18h30 locale
+  assert.equal(slots[0], '19:30');
+});

@@ -4,7 +4,7 @@ import { localize } from '../middleware/locals.js';
 import { noStore, limiter } from '../middleware/protect.js';
 import { render } from '../render.js';
 import * as repo from '../db/repo.js';
-import { dateProblem, nextDays, localNow, addDays } from '../domain/schedule.js';
+import { dateProblem, nextDays, localNow, addDays, slotsFor } from '../domain/schedule.js';
 import { slotAvailability } from '../domain/availability.js';
 import { onlineBookingSchema, fieldErrors } from '../validation.js';
 import { createOnlineBooking, findByToken, cancelByClient, isUpcoming, BookingError } from '../services/reservations.js';
@@ -28,10 +28,13 @@ async function bookingPage({ party, date, values = {}, errors = {} }) {
     partyError: !validParty,
     date, dateError, ready, slots,
     allFull: slots.length > 0 && slots.every((s) => s.full),
-    days: nextDays(7, new Date(), closures),
+    // « Aujourd'hui » n'est proposé que s'il reste au moins un horaire.
+    days: nextDays(7, new Date(), closures).map((d) => (d.isToday && !d.closed && !slotsFor(d.date, new Date(), rules, closures).length
+      ? { ...d, closed: true, over: true } : d)),
     minDate: today,
     maxDate: addDays(today, rules.maxDaysAhead),
     maxParty: rules.maxPartyOnline,
+    maxDaysAhead: rules.maxDaysAhead,
     values, errors,
   };
 }
@@ -79,7 +82,7 @@ export function reservationRouter({ rateLimit }) {
         } catch (err) {
           if (err instanceof BookingError) {
             const field = err.field ?? 'heure';
-            const status = err.code === 'full' || err.code === 'slot_gone' ? 409 : 422;
+            const status = ['full', 'slot_gone', 'duplicate'].includes(err.code) ? 409 : 422;
             if (field === 'heure') values.heure = '';
             return rerender({ [field]: err.code }, status).catch(next);
           }

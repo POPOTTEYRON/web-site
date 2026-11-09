@@ -15,7 +15,7 @@ const post = (data, path = '/reserver') => request(app).post(path).type('form').
 const count = async () => Number((await pool.query('SELECT count(*) FROM reservations')).rows[0].count);
 
 test('réservation valide : enregistrée, redirection vers la page de gestion, email écrit', async () => {
-  const res = await post(booking({ remarque: 'Allergie aux arachides' }));
+  const res = await post(booking({ remarque: 'Allergie aux arachides', email: 'client@exemple.fr' }));
   assert.equal(res.status, 303);
   assert.match(res.headers.location, /^\/reservation\/[A-Za-z0-9_-]{43}\?nouvelle=1$/);
   const { rows } = await pool.query('SELECT * FROM reservations');

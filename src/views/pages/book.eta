@@ -16,8 +16,8 @@
         </label>
         <% } %>
       </div>
-      <% if (it.partyError) { %><p class="field-error" role="alert"><%= it.t('book.errors.party') %></p><% } %>
-      <p class="hint"><%= it.t('book.groupCall') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
+      <% if (it.partyError) { %><p class="field-error" role="alert"><%= it.t('book.errors.party', { max: it.maxParty }) %></p><% } %>
+      <p class="hint"><%= it.t('book.groupCall', { max: it.maxParty }) %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
     </fieldset>
 
     <fieldset class="field-group">
@@ -29,7 +29,7 @@
           <span class="choice__box">
             <span class="choice__dow"><%= d.isToday ? it.t('book.today') : it.fmt.weekdayShort(d.date) %></span>
             <span class="choice__num"><%= it.fmt.dayNumber(d.date) %></span>
-            <% if (d.closed) { %><span class="choice__sub"><%= it.t('book.closed') %></span><% } %>
+            <% if (d.closed) { %><span class="choice__sub"><%= d.over ? it.t('book.noMore') : it.t('book.closed') %></span><% } %>
           </span>
         </label>
         <% } %>
@@ -39,7 +39,7 @@
         <span class="field__label"><%= it.t('book.otherDate') %></span>
         <input class="input" type="date" name="date" min="<%= it.minDate %>" max="<%= it.maxDate %>" value="<%= it.date && !inStrip ? it.date : '' %>" data-other-date>
       </label>
-      <% if (it.dateError) { %><p class="field-error" role="alert"><%= it.t('book.errors.' + it.dateError) %></p><% } %>
+      <% if (it.dateError) { %><p class="field-error" role="alert"><%= it.t('book.errors.' + it.dateError, { days: it.maxDaysAhead }) %></p><% } %>
     </fieldset>
     <button class="btn btn--secondary" type="submit" data-hide-js><%= it.t('book.showSlots') %></button>
   </form>

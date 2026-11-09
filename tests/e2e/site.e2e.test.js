@@ -5,7 +5,9 @@ import { createRequire } from 'node:module';
 import { createApp } from '../../src/app.js';
 import { pool } from '../../src/db/pool.js';
 import { ROUTES } from '../../src/i18n/routes.js';
-import { resetDb } from '../helpers.js';
+import { resetDb, openDay } from '../helpers.js';
+import { hash } from '@node-rs/argon2';
+import { upsertAdmin } from '../../src/db/repo.js';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -146,5 +148,54 @@ test('clavier : lien d\'évitement visible au premier Tab', async () => {
   await page.keyboard.press('Tab');
   const box = await page.locator('.skip-link').boundingBox();
   assert.ok(box && box.y >= 0, 'le lien « Aller au contenu » apparaît à l\'écran');
+  await ctx.close();
+});
+
+test('parcours restaurateur : connexion, ajout téléphone, statut, réglage, fermeture avec réservation', async () => {
+  await upsertAdmin('gerant@timango-gp.example', await hash('motdepasse-de-test-123'));
+  const { ctx, page, errors } = await open();
+  page.on('dialog', (d) => d.accept());
+  const day = openDay(4);
+
+  await page.goto(base + '/admin');
+  assert.match(page.url(), /\/admin\/connexion/);
+  await page.getByLabel('Email').fill('gerant@timango-gp.example');
+  await page.getByLabel('Mot de passe').fill('motdepasse-de-test-123');
+  await Promise.all([page.waitForURL(/\/admin$/), page.getByRole('button', { name: 'Se connecter' }).click()]);
+
+  // Réservation prise par téléphone
+  await page.getByRole('link', { name: 'Ajouter', exact: true }).click();
+  await page.getByLabel('Date').fill(day);
+  await page.getByLabel('Heure').fill('19:45');
+  await page.getByLabel('Personnes').fill('6');
+  await page.getByLabel('Nom').fill('Habitué Démo');
+  await page.getByLabel('Téléphone').fill('0590 11 22 33');
+  await Promise.all([page.waitForURL(/ok=creee/), page.getByRole('button', { name: 'Enregistrer la réservation' }).click()]);
+  assert.match(await page.locator('.notice').first().textContent(), /Réservation ajoutée/);
+  assert.match(await page.locator('.resa').first().textContent(), /Habitué Démo/);
+
+  // Réglage
+  await page.getByRole('link', { name: 'Réglages' }).click();
+  await page.getByLabel('Couverts réservables en ligne').fill('30');
+  await Promise.all([page.waitForURL(/ok=reglages/), page.getByRole('button', { name: 'Enregistrer les réglages' }).click()]);
+  assert.equal(await page.getByLabel('Couverts réservables en ligne').inputValue(), '30');
+
+  // Fermeture sur le jour réservé : avertissement, puis confirmation explicite
+  await page.locator('#fermeture').getByLabel('Date').fill(day);
+  await page.locator('#fermeture').getByLabel('Motif (facultatif)').fill('Inventaire');
+  await page.getByRole('button', { name: 'Ajouter la fermeture' }).click();
+  assert.match(await page.locator('#fermeture .notice').textContent(), /1 réservation\(s\) confirmée\(s\)[\s\S]*Habitué Démo[\s\S]*à appeler/);
+  await page.getByLabel('Annuler ces réservations et prévenir les clients par email').check();
+  await Promise.all([page.waitForURL(/fermeture_annulations/), page.getByRole('button', { name: 'Ajouter la fermeture' }).click()]);
+  assert.match(await page.locator('.notice').first().textContent(), /1 réservation\(s\) annulée\(s\), 0 client\(s\) prévenu\(s\)[\s\S]*appelez les autres/);
+
+  // Le jour fermé apparaît dans le planning
+  await page.getByRole('link', { name: 'Planning' }).click();
+  assert.ok(await page.getByText('Fermeture exceptionnelle').count() >= 1);
+
+  await page.getByRole('button', { name: 'Déconnexion' }).click();
+  await page.waitForURL(/connexion/);
+  // Seule « erreur » tolérée : le 409 voulu de l'avertissement de fermeture.
+  assert.deepEqual(errors.filter((e) => !/status of 409/.test(e)), []);
   await ctx.close();
 });

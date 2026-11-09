@@ -5,7 +5,7 @@ import { hash } from '@node-rs/argon2';
 import { createApp } from '../../src/app.js';
 import { pool } from '../../src/db/pool.js';
 import { upsertAdmin } from '../../src/db/repo.js';
-import { resetDb, booking, openDay, nextMonday, outbox } from '../helpers.js';
+import { resetDb, booking, openDay, nextMonday, outbox, insertBooking } from '../helpers.js';
 
 const app = createApp();
 const EMAIL = 'gerant@timango-gp.example';
@@ -96,28 +96,39 @@ test('vue du jour : réservations, totaux, remarques', async () => {
   assert.equal(res.headers['cache-control'], 'no-store');
 });
 
-test('changement de statut : honorée, absent, annulation par le restaurant avec email', async () => {
+test('changement de statut (jour même) : honorée, absent, rétablir ; annulation refusée une fois l\'heure passée', async () => {
+  const r = await insertBooking({ heure: '00:00', email: 'client@exemple.fr' });
+  const { agent, csrf } = await login();
+  const set = (statut) => agent.post(`/admin/reservations/${r.id}/statut`).type('form').send({ _csrf: csrf, statut });
+  const status = async () => (await pool.query('SELECT statut FROM reservations')).rows[0].statut;
+  assert.equal((await set('honoree')).status, 303); assert.equal(await status(), 'honoree');
+  await set('absent'); assert.equal(await status(), 'absent');
+  await set('confirmee'); assert.equal(await status(), 'confirmee');
+  const late = await set('annulee_restaurant');
+  assert.match(late.headers.location, /ok=refuse/, 'pas d\'email d\'annulation pour une réservation passée');
+  assert.equal(await status(), 'confirmee');
+  assert.equal(outbox.length, 0);
+  assert.equal((await set('nimporte')).status, 400);
+});
+
+test('réservation future : annulation par le restaurant (email), mais ni « honorée » ni « absent »', async () => {
   const day = openDay();
   await request(app).post('/reserver').type('form').send(booking({ date: day }));
   const { rows: [r] } = await pool.query('SELECT id FROM reservations');
   const { agent, csrf } = await login();
   const set = (statut) => agent.post(`/admin/reservations/${r.id}/statut`).type('form').send({ _csrf: csrf, statut });
   const status = async () => (await pool.query('SELECT statut FROM reservations')).rows[0].statut;
-
-  assert.equal((await set('honoree')).status, 303); assert.equal(await status(), 'honoree');
-  await set('absent'); assert.equal(await status(), 'absent');
-  await set('confirmee'); assert.equal(await status(), 'confirmee');
+  const page = await agent.get(`/admin?date=${day}`);
+  assert.doesNotMatch(page.text, /value="honoree"/);
+  assert.match(page.text, /value="annulee_restaurant"/);
+  assert.match((await set('honoree')).headers.location, /ok=refuse/);
+  assert.equal(await status(), 'confirmee');
   const n = outbox.length;
-  const res = await set('annulee_restaurant');
-  assert.match(res.headers.location, /ok=annulee_email/);
+  assert.match((await set('annulee_restaurant')).headers.location, /ok=annulee_email/);
   assert.equal(await status(), 'annulee_restaurant');
   assert.equal(outbox.length, n + 1);
   assert.match(outbox.at(-1).text, /nous avons dû annuler/);
-  // Une réservation annulée ne peut pas être rétablie (la place a pu être reprise).
-  const back = await set('confirmee');
-  assert.match(back.headers.location, /ok=refuse/);
-  assert.equal(await status(), 'annulee_restaurant');
-  assert.equal((await set('nimporte')).status, 400);
+  assert.match((await set('confirmee')).headers.location, /ok=refuse/, 'pas de rétablissement après annulation');
 });
 
 test('réservation par téléphone : capacité de la salle (42), pas la limite en ligne', async () => {
