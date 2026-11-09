@@ -13,7 +13,9 @@
     "db:migrate": "node --env-file=.env src/db/migrate.js",
     "test": "node --env-file-if-exists=.env.test --test --test-concurrency=1 \"tests/unit/**/*.test.js\" \"tests/integration/**/*.test.js\"",
     "test:e2e": "node --env-file-if-exists=.env.test --test --test-concurrency=1 \"tests/e2e/**/*.test.js\"",
-    "admin:creer": "node --env-file=.env scripts/creer-admin.js"
+    "admin:creer": "node --env-file=.env scripts/creer-admin.js",
+    "donnees:purger": "node --env-file=.env scripts/purger-donnees.js",
+    "donnees:demo": "node --env-file=.env scripts/donnees-demo.js"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

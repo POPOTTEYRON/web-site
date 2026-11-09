@@ -151,7 +151,7 @@ test('réservation par téléphone : validations (lundi, hors horaires, champs)'
 
 test('réglages : modification prise en compte par la réservation en ligne', async () => {
   const { agent, csrf } = await login();
-  const settings = { _csrf: csrf, capacite_en_ligne: '10', capacite_salle: '42', personnes_max_en_ligne: '4', duree_table_min: '90', intervalle_min: '30', delai_min_min: '60', jours_max: '60' };
+  const settings = { _csrf: csrf, capacite_en_ligne: '10', capacite_salle: '42', personnes_max_en_ligne: '4', duree_table_min: '90', intervalle_min: '30', delai_min_min: '60', jours_max: '60', conservation_mois: '12' };
   assert.equal((await agent.post('/admin/reglages').type('form').send(settings)).status, 303);
   assert.equal((await request(app).post('/reserver').type('form').send(booking({ personnes: '5' }))).status, 422); // > 4
   assert.equal((await request(app).post('/reserver').type('form').send(booking({ personnes: '4' }))).status, 303);
@@ -191,4 +191,19 @@ test('connexion : 6e tentative en 15 min bloquée', async () => {
   for (let i = 0; i < 5; i += 1) await agent.post('/admin/connexion').type('form').send({ _csrf: csrf, email: EMAIL, mot_de_passe: 'faux' });
   const res = await agent.post('/admin/connexion').type('form').send({ _csrf: csrf, email: EMAIL, mot_de_passe: PASSWORD });
   assert.equal(res.status, 429);
+});
+
+test('admin : effacement des données personnelles d\'une réservation passée', async () => {
+  const { rows: [r] } = await pool.query(
+    `INSERT INTO reservations (reference, date, heure, personnes, nom, telephone, source, statut)
+     VALUES ('PASSEE01', current_date - 30, '19:00', 2, 'Ancien Client', '0690000000', 'telephone', 'honoree') RETURNING id, date`,
+  );
+  const { agent, csrf } = await login();
+  const day = await agent.get(`/admin?date=${r.date}`);
+  assert.match(day.text, /Effacer les données personnelles/);
+  const res = await agent.post(`/admin/reservations/${r.id}/anonymiser`).type('form').send({ _csrf: csrf });
+  assert.match(res.headers.location, /ok=anonymisee/);
+  const page = await agent.get(`/admin?date=${r.date}`);
+  assert.doesNotMatch(page.text, /Ancien Client/);
+  assert.match(page.text, /Données personnelles effacées/);
 });

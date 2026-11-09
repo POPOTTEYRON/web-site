@@ -5,9 +5,9 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { pool } from './pool.js';
 
-const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'migrations');
+const DEFAULT_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'migrations');
 
-export async function migrate({ log = console.log } = {}) {
+export async function migrate({ log = console.log, dir = DEFAULT_DIR } = {}) {
   const client = await pool.connect();
   try {
     await client.query('SELECT pg_advisory_lock(727001)');

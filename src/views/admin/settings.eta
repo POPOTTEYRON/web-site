@@ -13,6 +13,7 @@
     ['duree_table_min', 'Durée d\'une table (minutes)', 'Temps pendant lequel une réservation occupe ses couverts.', 30, 300],
     ['delai_min_min', 'Délai minimum avant l\'arrivée (minutes)', 'Pour une réservation le jour même.', 0, 2880],
     ['jours_max', 'Réservation possible jusqu\'à (jours)', '', 1, 365],
+    ['conservation_mois', 'Conservation des coordonnées clients (mois)', `Après ce délai, nom, téléphone, email et remarque sont effacés automatiquement (actuellement : réservations antérieures au ${it.fmt.dateFull(it.cutoff)}). Durée à faire valider.`, 1, 120],
   ]) { %>
   <label class="field"><span class="field__label"><%= label %></span>
     <input class="input input--short" type="number" name="<%= name %>" min="<%= min %>" max="<%= max %>" required value="<%= v[name] %>"<% if (e[name]) { %> aria-invalid="true"<% } %>>

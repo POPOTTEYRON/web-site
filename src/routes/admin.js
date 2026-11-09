@@ -6,6 +6,7 @@ import { localize } from '../middleware/locals.js';
 import { render } from '../render.js';
 import * as repo from '../db/repo.js';
 import { localNow, addDays, isValidDate, openingHours, toMinutes, toHHMM } from '../domain/schedule.js';
+import { cutoffDate } from '../services/retention.js';
 import { peakOccupancy } from '../domain/availability.js';
 import { adminBookingSchema, settingsSchema, closureSchema, fieldErrors } from '../validation.js';
 import { createAdminBooking, changeStatusByAdmin, BookingError, ADMIN_TRANSITIONS } from '../services/reservations.js';
@@ -111,6 +112,17 @@ export function adminRouter({ rateLimit }) {
     }
   });
 
+  // Droit à l'effacement : efface les coordonnées (date, couverts et statut restent pour l'activité).
+  router.post('/admin/reservations/:id/anonymiser', async (req, res, next) => {
+    try {
+      const id = Number(req.params.id);
+      const r = Number.isSafeInteger(id) ? await repo.findById(id) : null;
+      if (!r) return res.status(404).type('text').send('Réservation introuvable');
+      const done = await repo.anonymizeReservation(id, localNow().date);
+      res.redirect(303, `/admin?date=${r.date}&ok=${done ? 'anonymisee' : 'anonymisation_refusee'}#r${r.id}`);
+    } catch (err) { next(err); }
+  });
+
   // --- Planning ---
   router.get('/admin/planning', async (req, res, next) => {
     try {
@@ -152,7 +164,10 @@ export function adminRouter({ rateLimit }) {
   const settingsPage = async (res, extra = {}, status = 200) => {
     const today = localNow().date;
     const [row, closures] = await Promise.all([repo.getSettingsRow(), repo.getClosures(today, addDays(today, 365))]);
-    render(res, 'admin/settings', { title: 'Réglages', section: 'reglages', values: row, errors: {}, closures, closureValues: {}, closureErrors: {}, flash: null, ...extra }, status);
+    render(res, 'admin/settings', {
+      title: 'Réglages', section: 'reglages', values: row, errors: {}, closures, closureValues: {}, closureErrors: {}, flash: null,
+      cutoff: cutoffDate(today, row.conservation_mois), ...extra,
+    }, status);
   };
 
   router.get('/admin/reglages', (req, res, next) => settingsPage(res, { flash: req.query.ok ?? null }).catch(next));

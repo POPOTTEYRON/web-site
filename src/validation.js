@@ -45,6 +45,7 @@ export const settingsSchema = z.object({
   delai_min_min: int(0, 2880),
   jours_max: int(1, 365),
   personnes_max_en_ligne: int(1, 42),
+  conservation_mois: int(1, 120),
 }).refine((s) => s.capacite_en_ligne <= s.capacite_salle, { path: ['capacite_en_ligne'], message: 'online_gt_room' })
   .refine((s) => s.personnes_max_en_ligne <= s.capacite_en_ligne, { path: ['personnes_max_en_ligne'], message: 'party_gt_online' });
 

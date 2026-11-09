@@ -13,8 +13,8 @@ export async function getSettingsRow(db = pool) {
 export async function updateSettings(s, db = pool) {
   await db.query(
     `UPDATE reglages SET capacite_en_ligne=$1, capacite_salle=$2, duree_table_min=$3, intervalle_min=$4,
-       delai_min_min=$5, jours_max=$6, personnes_max_en_ligne=$7, modifie_le=now() WHERE id = 1`,
-    [s.capacite_en_ligne, s.capacite_salle, s.duree_table_min, s.intervalle_min, s.delai_min_min, s.jours_max, s.personnes_max_en_ligne],
+       delai_min_min=$5, jours_max=$6, personnes_max_en_ligne=$7, conservation_mois=$8 WHERE id = 1`,
+    [s.capacite_en_ligne, s.capacite_salle, s.duree_table_min, s.intervalle_min, s.delai_min_min, s.jours_max, s.personnes_max_en_ligne, s.conservation_mois],
   );
 }
 
@@ -45,7 +45,7 @@ export async function lockDate(date, db) {
 }
 
 const COLUMNS = `id, reference, date, heure, personnes, nom, telephone, email, remarque, langue, statut, source,
-  email_envoye_le, annule_le, cree_le`;
+  email_envoye_le, annule_le, anonymise_le, cree_le, modifie_le`;
 
 export async function insertReservation(r, db) {
   const { rows } = await db.query(
@@ -73,7 +73,7 @@ export async function markEmailSent(id, db = pool) {
 export async function setStatus(id, statut, allowedFrom, db = pool) {
   const cancelled = statut === 'annulee_client' || statut === 'annulee_restaurant';
   const { rows } = await db.query(
-    `UPDATE reservations SET statut = $2, modifie_le = now(),
+    `UPDATE reservations SET statut = $2,
        annule_le = CASE WHEN $3 THEN now() ELSE NULL END
      WHERE id = $1 AND statut = ANY($4::statut_reservation[]) RETURNING ${COLUMNS}`,
     [id, statut, cancelled, allowedFrom],
@@ -108,4 +108,25 @@ export async function upsertAdmin(email, hash, db = pool) {
     'INSERT INTO admins (email, mot_de_passe_hash) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET mot_de_passe_hash = EXCLUDED.mot_de_passe_hash',
     [email, hash],
   );
+}
+
+// --- Conservation des données (RGPD) ---
+const ANONYMIZE_SET = 'nom = NULL, telephone = NULL, email = NULL, remarque = NULL, jeton_hash = NULL, anonymise_le = now()';
+
+/** Efface les coordonnées d'une réservation (droit à l'effacement). Refuse une réservation à venir encore confirmée. */
+export async function anonymizeReservation(id, today, db = pool) {
+  const { rows } = await db.query(
+    `UPDATE reservations SET ${ANONYMIZE_SET}
+     WHERE id = $1 AND anonymise_le IS NULL AND NOT (statut = 'confirmee' AND date >= $2) RETURNING id`,
+    [id, today],
+  );
+  return rows.length === 1;
+}
+
+/** Anonymise toutes les réservations dont la date est antérieure à `before`. Renvoie le nombre traité. */
+export async function anonymizeBefore(before, db = pool) {
+  const { rowCount } = await db.query(
+    `UPDATE reservations SET ${ANONYMIZE_SET} WHERE date < $1 AND anonymise_le IS NULL`, [before],
+  );
+  return rowCount;
 }

@@ -5,6 +5,7 @@ const LOCALE = { fr: 'fr-FR', en: 'en-GB' };
 export function formatters(lang) {
   const price = new Intl.NumberFormat(LOCALE[lang], { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
   const long = new Intl.DateTimeFormat(LOCALE[lang], { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+  const full = new Intl.DateTimeFormat(LOCALE[lang], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
   const dow = new Intl.DateTimeFormat(LOCALE[lang], { weekday: 'short', timeZone: 'UTC' });
   const asDate = (s) => new Date(`${s}T00:00:00Z`);
   return {
@@ -17,6 +18,7 @@ export function formatters(lang) {
       return `${h12}${mm ? ':' + String(mm).padStart(2, '0') : ''}${h < 12 ? 'am' : 'pm'}`;
     },
     dateLong: (s) => long.format(asDate(s)),
+    dateFull: (s) => full.format(asDate(s)),
     weekdayShort: (s) => dow.format(asDate(s)).replace('.', ''),
     dayNumber: (s) => String(asDate(s).getUTCDate()),
   };

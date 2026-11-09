@@ -408,3 +408,6 @@ body:has(.mobile-bar) { padding-bottom: var(--bar-h); }
 .planning__info { color: var(--gris); }
 .planning__row--closed { color: #6F6650; }
 .closures li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--sable); flex-wrap: wrap; }
+.link-button { background: none; border: 0; padding: 0; min-height: 44px; font: inherit; font-size: .8125rem; color: var(--gris); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link-button:hover { color: var(--terracotta-fonce); }
+.resa__erase { margin: 0; }

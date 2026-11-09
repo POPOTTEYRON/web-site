@@ -1,6 +1,6 @@
 <% layout('/admin/layout', it) %>
-<% const FLASH = { statut: 'Statut mis à jour.', refuse: 'Changement de statut impossible depuis l\'état actuel.', annulee: 'Réservation annulée (aucun email envoyé).', annulee_email: 'Réservation annulée. Le client a été prévenu par email.', creee: 'Réservation ajoutée.', creee_email: 'Réservation ajoutée. Email de confirmation envoyé au client.' }; %>
-<% if (it.flash && FLASH[it.flash]) { %><p class="notice<%= it.flash === 'refuse' ? ' notice--error' : '' %>" role="status"><%= FLASH[it.flash] %></p><% } %>
+<% const FLASH = { statut: 'Statut mis à jour.', refuse: 'Changement de statut impossible depuis l\'état actuel.', annulee: 'Réservation annulée (aucun email envoyé).', annulee_email: 'Réservation annulée. Le client a été prévenu par email.', creee: 'Réservation ajoutée.', creee_email: 'Réservation ajoutée. Email de confirmation envoyé au client.', anonymisee: 'Données personnelles effacées.', anonymisation_refusee: 'Effacement impossible : annulez d\'abord la réservation à venir, ou elle est déjà effacée.' }; %>
+<% if (it.flash && FLASH[it.flash]) { %><p class="notice<%= ['refuse', 'anonymisation_refusee'].includes(it.flash) ? ' notice--error' : '' %>" role="status"><%= FLASH[it.flash] %></p><% } %>
 <div class="day-nav">
   <a class="icon-btn" href="/admin?date=<%= it.prev %>" aria-label="Jour précédent">←</a>
   <h1 class="h2 day-nav__title"><%= it.fmt.dateLong(it.date) %><% if (it.date === it.today) { %> <span class="muted">(aujourd'hui)</span><% } %></h1>
@@ -27,7 +27,11 @@
   <% for (const r of list) { const off = r.statut.startsWith('annulee'); %>
   <article class="resa<%= off ? ' resa--off' : '' %>" id="r<%= r.id %>">
     <div class="resa__top"><span class="resa__time"><%= it.fmt.time(r.heure) %></span><span class="resa__party"><%= r.personnes %> pers.</span></div>
+    <% if (r.anonymise_le) { %>
+    <p class="resa__who muted">Données personnelles effacées</p>
+    <% } else { %>
     <p class="resa__who"><%= r.nom %> · <a href="tel:<%= r.telephone.replace(/[^0-9+]/g, '') %>"><%= r.telephone %></a><% if (r.email) { %> · <a href="mailto:<%= r.email %>"><%= r.email %></a><% } %></p>
+    <% } %>
     <p class="resa__meta"><%= r.source === 'telephone' ? 'Prise par téléphone' : 'En ligne' %> · réf. <%= r.reference %><% if (r.langue === 'en') { %> · EN<% } %></p>
     <% if (r.remarque) { %><p class="resa__note"><strong>Remarque :</strong> <%= r.remarque %></p><% } %>
     <p><span class="badge badge--<%= r.statut %>"><%= it.t('manage.status.' + r.statut) %></span></p>
@@ -42,6 +46,13 @@
       </form>
       <% } %>
     </div>
+    <% } %>
+    <% const upcoming = r.statut === 'confirmee' && r.date >= it.today; %>
+    <% if (!r.anonymise_le && !upcoming) { %>
+    <form method="post" action="/admin/reservations/<%= r.id %>/anonymiser" class="resa__erase" data-confirm="Effacer définitivement le nom, le téléphone, l'email et la remarque de cette réservation ?">
+      <input type="hidden" name="_csrf" value="<%= it.csrf %>">
+      <button class="link-button" type="submit">Effacer les données personnelles</button>
+    </form>
     <% } %>
   </article>
   <% } %>

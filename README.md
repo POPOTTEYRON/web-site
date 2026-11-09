@@ -46,6 +46,34 @@ npm test            # unitaires + intégration
 npm run test:e2e    # navigateur (Playwright/Chromium) : mobile, tablette, ordinateur
 ```
 
+## Base de données
+
+Migrations SQL versionnées dans `src/db/migrations/` (appliquées dans l'ordre, chacune dans une transaction) :
+
+| Table | Contenu |
+|---|---|
+| `reservations` | Réservations (en ligne / téléphone), statut, consentement, empreinte du jeton client |
+| `reglages` | Règles de réservation et durée de conservation (une seule ligne, modifiable dans l'admin) |
+| `fermetures` | Fermetures exceptionnelles |
+| `admins` | Comptes administrateur (mot de passe haché argon2id) |
+| `session` | Sessions de l'admin |
+
+Les règles essentielles sont aussi garanties par la base (contraintes `CHECK`) : une réservation en ligne a toujours un email, un jeton et un consentement ; une réservation anonymisée n'a plus aucune coordonnée, etc.
+
+```bash
+npm run donnees:demo -- --reinitialiser   # développement : ~150 réservations fictives (refusé en production)
+npm run donnees:purger                    # anonymise les réservations au-delà de la durée de conservation
+```
+
+**Conservation (RGPD)** : nom, téléphone, email et remarque sont effacés automatiquement `conservation_mois` mois après la date de la réservation (12 par défaut, à valider). Le serveur le fait au démarrage puis toutes les 24 h. L'admin peut aussi effacer à la demande les données d'une réservation passée ou annulée. Date, heure, couverts et statut sont conservés pour l'activité.
+
+**Sauvegarde** (à planifier chez l'hébergeur) :
+
+```bash
+pg_dump --format=custom --file=timango-$(date +%F).dump "$DATABASE_URL"
+pg_restore --clean --if-exists --dbname="$DATABASE_URL" timango-AAAA-MM-JJ.dump
+```
+
 ## Variables d'environnement
 
 Voir `.env.example`. `MAIL_TRANSPORT=file` (par défaut) écrit les emails dans `var/mail/` au lieu de les envoyer.
