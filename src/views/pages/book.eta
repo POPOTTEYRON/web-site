@@ -1,0 +1,95 @@
+<% layout('/layouts/base', { title: it.t('book.title'), noindex: Boolean(it.date) }) %>
+<div class="wrap wrap--narrow page-head">
+  <h1 class="h1"><%= it.t('book.title') %></h1>
+  <p class="lead"><%= it.t('book.lead') %></p>
+</div>
+
+<div class="wrap wrap--narrow booking">
+  <form class="booking__form" method="get" action="<%= it.url('book') %>#etape-heure" data-autosubmit>
+    <fieldset class="field-group">
+      <legend class="field-group__legend"><%= it.t('book.step1') %></legend>
+      <div class="choice-grid choice-grid--party">
+        <% for (let n = 1; n <= it.maxParty; n++) { %>
+        <label class="choice">
+          <input type="radio" name="personnes" value="<%= n %>"<% if (n === it.party) { %> checked<% } %>>
+          <span class="choice__box"><%= it.t('book.people', { n }) %></span>
+        </label>
+        <% } %>
+      </div>
+      <% if (it.partyError) { %><p class="field-error" role="alert"><%= it.t('book.errors.party') %></p><% } %>
+      <p class="hint"><%= it.t('book.groupCall') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
+    </fieldset>
+
+    <fieldset class="field-group">
+      <legend class="field-group__legend"><%= it.t('book.step2') %></legend>
+      <div class="day-strip">
+        <% for (const d of it.days) { %>
+        <label class="choice choice--day<% if (d.closed) { %> is-closed<% } %>">
+          <input type="radio" name="date" value="<%= d.date %>"<% if (d.date === it.date) { %> checked<% } %><% if (d.closed) { %> disabled<% } %>>
+          <span class="choice__box">
+            <span class="choice__dow"><%= d.isToday ? it.t('book.today') : it.fmt.weekdayShort(d.date) %></span>
+            <span class="choice__num"><%= it.fmt.dayNumber(d.date) %></span>
+            <% if (d.closed) { %><span class="choice__sub"><%= it.t('book.closed') %></span><% } %>
+          </span>
+        </label>
+        <% } %>
+      </div>
+      <% const inStrip = it.days.some((d) => d.date === it.date); %>
+      <label class="field field--inline">
+        <span class="field__label"><%= it.t('book.otherDate') %></span>
+        <input class="input" type="date" name="date" min="<%= it.minDate %>" value="<%= it.date && !inStrip ? it.date : '' %>" data-other-date>
+      </label>
+      <% if (it.dateError) { %><p class="field-error" role="alert"><%= it.t('book.errors.' + it.dateError) %></p><% } %>
+    </fieldset>
+    <button class="btn btn--secondary" type="submit" data-hide-js><%= it.t('book.showSlots') %></button>
+  </form>
+
+  <% if (it.ready) { %>
+  <form class="booking__form" method="post" action="<%= it.url('book') %>" id="etape-heure" novalidate data-validate
+    data-msg-required="<%= it.t('book.errors.required') %>" data-msg-email="<%= it.t('book.errors.email') %>"
+    data-msg-phone="<%= it.t('book.errors.phone') %>" data-msg-slot="<%= it.t('book.errors.slot') %>"
+    data-msg-consent="<%= it.t('book.errors.consent') %>" data-msg-summary="<%= it.t('book.errors.summary') %>">
+    <div class="notice notice--error" role="alert" data-error-summary hidden></div>
+    <input type="hidden" name="personnes" value="<%= it.party %>">
+    <input type="hidden" name="date" value="<%= it.date %>">
+    <fieldset class="field-group" data-slot-group>
+      <legend class="field-group__legend"><%= it.t('book.step3') %> — <%= it.fmt.dateLong(it.date) %></legend>
+      <% if (it.slots.length) { %>
+      <div class="choice-grid">
+        <% it.slots.forEach((s, i) => { %>
+        <label class="choice">
+          <input type="radio" name="heure" value="<%= s %>" required<% if (i === 0) { %> data-first<% } %>>
+          <span class="choice__box"><%= it.fmt.time(s) %></span>
+        </label>
+        <% }) %>
+      </div>
+      <p class="hint"><%= it.t('book.slotsNote') %></p>
+      <% } else { %>
+      <p class="notice"><%= it.t('book.noSlots') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a></p>
+      <% } %>
+    </fieldset>
+
+    <% if (it.slots.length) { %>
+    <fieldset class="field-group">
+      <legend class="field-group__legend"><%= it.t('book.step4') %></legend>
+      <label class="field"><span class="field__label"><%= it.t('book.name') %></span>
+        <input class="input" type="text" name="nom" autocomplete="name" required maxlength="80"></label>
+      <label class="field"><span class="field__label"><%= it.t('book.phone') %></span>
+        <input class="input" type="tel" name="telephone" autocomplete="tel" required maxlength="20" inputmode="tel" pattern="[0-9 +\(\)\.\-]{6,20}"></label>
+      <label class="field"><span class="field__label"><%= it.t('book.email') %></span>
+        <input class="input" type="email" name="email" autocomplete="email" required maxlength="120"></label>
+      <label class="field"><span class="field__label"><%= it.t('book.note') %></span>
+        <textarea class="input" name="remarque" rows="3" maxlength="500" placeholder="<%= it.t('book.notePlaceholder') %>"></textarea></label>
+      <label class="check">
+        <input type="checkbox" name="consentement" value="oui" required>
+        <span><%= it.t('book.consent') %> <a href="<%= it.url('privacy') %>"><%= it.t('book.privacyLink') %></a></span>
+      </label>
+    </fieldset>
+    <div class="booking__submit">
+      <p><strong><%= it.t('book.summary') %> :</strong> <%= it.t('book.people', { n: it.party }) %><% if (it.lang === 'en') { %> <%= it.party > 1 ? 'guests' : 'guest' %><% } %> · <%= it.fmt.dateLong(it.date) %><span data-summary-time></span></p>
+      <button class="btn btn--primary btn--lg btn--block" type="submit"><%= it.t('book.submit') %></button>
+    </div>
+    <% } %>
+  </form>
+  <% } %>
+</div>

@@ -1,0 +1,13 @@
+<% const s = it.status; %>
+<p class="status <%= s.open ? 'status--open' : 'status--closed' %>">
+  <span class="status__dot" aria-hidden="true"></span>
+  <% if (s.closedToday) { %>
+    <strong><%= it.t('status.closedToday') %></strong> · <%= it.t('status.reopens') %>
+  <% } else if (s.open) { %>
+    <strong><%= it.t('status.openNow') %></strong> · <%= it.fmt.time(s.hours.open) %> – <%= it.fmt.time(s.hours.close) %>
+  <% } else if (s.later) { %>
+    <strong><%= it.t('status.openToday') %></strong> · <%= it.fmt.time(s.hours.open) %> – <%= it.fmt.time(s.hours.close) %>
+  <% } else { %>
+    <strong><%= it.t('status.closedNow') %></strong> · <%= it.t('common.hoursShort') %>
+  <% } %>
+</p>

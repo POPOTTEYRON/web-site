@@ -1,0 +1,16 @@
+<li class="dish">
+  <div class="dish__line">
+    <h3 class="dish__name"><%= it.dish.nom[it.lang] %></h3>
+    <span class="dish__leader" aria-hidden="true"></span>
+    <span class="dish__price"><%= it.fmt.price(it.dish.prix) %></span>
+  </div>
+  <% if (it.dish.description) { %>
+  <p class="dish__desc"><%= it.dish.description[it.lang] %></p>
+  <% } else { %>
+  <p class="dish__desc dish__desc--todo"><%= it.t('menu.descToComplete') %></p>
+  <% } %>
+  <% if (it.showAllergens) { %>
+  <p class="dish__allergens"><%= it.t('menu.allergens') %> : <% if (it.dish.allergenes.length) { %><%= it.dish.allergenes.map((a) => it.t('menu.allergenNames.' + a)).join(', ') %><% } else { %><%= it.t('menu.noAllergen') %><% } %></p>
+  <% } %>
+  <% if (it.dish.alcool) { %><p class="dish__allergens"><%= it.t('common.alcohol') %></p><% } %>
+</li>

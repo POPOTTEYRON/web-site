@@ -1,0 +1,160 @@
+{
+  "meta": {
+    "siteDescription": "Ti Mango, restaurant créole contemporain à Sainte-Anne (Guadeloupe) : cuisine maison, produits frais et locaux. Carte, horaires et réservation en ligne.",
+    "demo": "Site de démonstration — entreprise fictive"
+  },
+  "nav": {
+    "label": "Navigation principale",
+    "skip": "Aller au contenu",
+    "menu": "La carte",
+    "restaurant": "Le restaurant",
+    "contact": "Accès & contact",
+    "book": "Réserver",
+    "open": "Menu",
+    "close": "Fermer",
+    "lang": "Langue",
+    "switchTo": "English version"
+  },
+  "status": {
+    "openNow": "Ouvert maintenant",
+    "openToday": "Ouvert aujourd'hui",
+    "closedNow": "Fermé maintenant",
+    "closedToday": "Fermé aujourd'hui",
+    "reopens": "réouverture mardi à 11h30"
+  },
+  "common": {
+    "bookTable": "Réserver une table",
+    "seeMenu": "Voir la carte",
+    "fullMenu": "Toute la carte",
+    "call": "Appeler",
+    "directions": "Itinéraire",
+    "address": "Adresse",
+    "hours": "Horaires",
+    "phone": "Téléphone",
+    "email": "Email",
+    "monday": "Lundi",
+    "tueSun": "Mardi – dimanche",
+    "closed": "Fermé",
+    "hoursLine": "Du mardi au dimanche, 11h30 – 22h · fermé le lundi",
+    "hoursShort": "Mar – dim · 11h30 – 22h",
+    "closedMonday": "Fermé le lundi",
+    "takeaway": "Envie d'emporter ?",
+    "takeawayCta": "Commandez par téléphone au",
+    "tempPhoto": "Illustration temporaire",
+    "toComplete": "À compléter",
+    "alcohol": "L'abus d'alcool est dangereux pour la santé, à consommer avec modération.",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "mapPlaceholder": "Plan d'accès",
+    "openMap": "Ouvrir le plan dans OpenStreetMap"
+  },
+  "home": {
+    "title": "Restaurant créole contemporain à Sainte-Anne",
+    "eyebrow": "Restaurant créole · Sainte-Anne, Guadeloupe",
+    "h1": "La cuisine créole, revisitée.",
+    "lead": "Une cuisine maison qui part des recettes antillaises traditionnelles et des produits frais de l'île, servie avec soin.",
+    "heroPhoto": "plat signature (photo à fournir)",
+    "infoLabel": "Informations pratiques",
+    "menuTitle": "À la carte",
+    "restaurantTitle": "Le restaurant",
+    "restaurantText": "Ti Mango revisite la cuisine antillaise traditionnelle avec une approche moderne : tout est fait maison, à partir de produits frais et locaux, et chaque assiette est présentée avec soin.",
+    "restaurantMore": "Découvrir le restaurant et la galerie",
+    "bookTitle": "Réservez votre table",
+    "bookText": "En ligne, en une minute. Pour un groupe de plus de 8 personnes, appelez-nous.",
+    "findUs": "Nous trouver"
+  },
+  "menu": {
+    "title": "La carte",
+    "intro": "Cuisine maison, produits frais et locaux. Prix en euros, service compris.",
+    "categories": "Catégories de la carte",
+    "allergens": "Allergènes",
+    "noAllergen": "Aucun des 14 allergènes réglementaires déclaré",
+    "descToComplete": "Description à compléter",
+    "toValidate": "Descriptions et allergènes : exemples à valider par le restaurateur. En cas d'allergie, signalez-le à l'équipe.",
+    "allergenNames": {
+      "poisson": "poisson",
+      "gluten": "gluten",
+      "oeufs": "œufs",
+      "crustaces": "crustacés",
+      "lait": "lait"
+    }
+  },
+  "restaurant": {
+    "title": "Le restaurant",
+    "lead": "Ti Mango revisite la cuisine antillaise traditionnelle avec une approche moderne, une présentation soignée et des produits frais.",
+    "conceptTitle": "Le concept",
+    "concept": "Les recettes créoles servent de point de départ. Tout est cuisiné sur place, à partir de produits frais et, autant que possible, locaux.",
+    "placeTitle": "Le lieu",
+    "place": "42 couverts, au 12 rue de la Plage à Sainte-Anne.",
+    "storyTodo": "Histoire du restaurant, présentation du ou de la chef, origine des produits.",
+    "galleryTitle": "Galerie",
+    "galleryNote": "Les photographies du restaurant remplaceront ces illustrations temporaires.",
+    "gallery": [
+      "Assiette signature",
+      "La salle",
+      "La terrasse",
+      "Le poisson du jour",
+      "Les desserts",
+      "En cuisine"
+    ]
+  },
+  "book": {
+    "title": "Réserver une table",
+    "lead": "Choisissez le nombre de personnes et la date, puis l'heure d'arrivée.",
+    "step1": "1. Nombre de personnes",
+    "step2": "2. Date",
+    "step3": "3. Heure d'arrivée",
+    "step4": "4. Vos coordonnées",
+    "people": "{n} pers.",
+    "groupCall": "Plus de 8 personnes ? Appelez-nous au",
+    "today": "Aujourd'hui",
+    "closed": "fermé",
+    "otherDate": "Autre date",
+    "showSlots": "Voir les horaires disponibles",
+    "noSlots": "Plus aucun horaire n'est disponible à cette date. Choisissez un autre jour ou appelez-nous.",
+    "slotsNote": "Durée indicative d'un repas : 1 h 30.",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "email": "Email",
+    "note": "Remarque (facultatif)",
+    "notePlaceholder": "Allergie, chaise haute, occasion…",
+    "consent": "J'accepte que ces informations soient utilisées pour gérer ma réservation.",
+    "privacyLink": "Politique de confidentialité",
+    "submit": "Confirmer la réservation",
+    "summary": "Récapitulatif",
+    "errors": {
+      "invalid": "Date invalide.",
+      "past": "Cette date est passée.",
+      "too_far": "Les réservations sont ouvertes jusqu'à 60 jours à l'avance.",
+      "closed": "Le restaurant est fermé ce jour-là (fermeture le lundi).",
+      "party": "Choisissez entre 1 et 8 personnes.",
+      "required": "Ce champ est obligatoire.",
+      "email": "Adresse email invalide (ex. nom@domaine.fr).",
+      "phone": "Numéro de téléphone invalide.",
+      "slot": "Choisissez une heure d'arrivée.",
+      "consent": "Votre accord est nécessaire pour enregistrer la réservation.",
+      "summary": "Le formulaire contient des erreurs. Corrigez les champs signalés."
+    },
+    "unavailableTitle": "Réservation en ligne bientôt disponible",
+    "unavailableText": "L'enregistrement des réservations n'est pas encore activé sur ce site de démonstration. Aucune réservation n'a été créée. Pour réserver, appelez-nous au"
+  },
+  "contact": {
+    "title": "Accès & contact",
+    "lead": "Au cœur de Sainte-Anne, à deux pas de la plage.",
+    "writeUs": "Écrivez-nous",
+    "mapNote": "Le plan interactif n'est pas chargé automatiquement afin de ne transmettre aucune donnée à un service tiers sans votre accord."
+  },
+  "legal": {
+    "title": "Mentions légales"
+  },
+  "privacy": {
+    "title": "Politique de confidentialité"
+  },
+  "errors": {
+    "notFoundTitle": "Page introuvable",
+    "notFoundText": "Cette page n'existe pas ou a été déplacée.",
+    "serverTitle": "Une erreur est survenue",
+    "serverText": "Le problème vient de notre côté. Réessayez dans un instant ou appelez-nous.",
+    "backHome": "Retour à l'accueil"
+  }
+}

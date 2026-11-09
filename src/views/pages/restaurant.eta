@@ -1,0 +1,31 @@
+<% layout('/layouts/base', { title: it.t('restaurant.title') }) %>
+<div class="wrap page-head">
+  <h1 class="h1"><%= it.t('restaurant.title') %></h1>
+  <p class="lead"><%= it.t('restaurant.lead') %></p>
+</div>
+<section class="wrap split section section--tight">
+  <%~ include('/partials/ph', { ...it, label: it.t('restaurant.placeTitle'), cls: 'split__photo' }) %>
+  <div class="split__text">
+    <h2 class="h2"><%= it.t('restaurant.conceptTitle') %></h2>
+    <p><%= it.t('restaurant.concept') %></p>
+    <h2 class="h2"><%= it.t('restaurant.placeTitle') %></h2>
+    <p><%= it.t('restaurant.place') %></p>
+    <p class="todo">[<%= it.t('common.toComplete') %>] <%= it.t('restaurant.storyTodo') %></p>
+  </div>
+</section>
+<section class="band-light" aria-labelledby="h-galerie">
+  <div class="wrap section">
+    <div>
+      <h2 class="h2" id="h-galerie"><%= it.t('restaurant.galleryTitle') %></h2>
+      <p class="muted"><%= it.t('restaurant.galleryNote') %></p>
+    </div>
+    <ul class="gallery">
+      <% it.t('restaurant.gallery').forEach((label, i) => { %>
+      <li class="gallery__item gallery__item--<%= i %>"><%~ include('/partials/ph', { ...it, label }) %></li>
+      <% }) %>
+    </ul>
+  </div>
+</section>
+<section class="wrap section band-cta">
+  <a class="btn btn--primary btn--lg" href="<%= it.url('book') %>"><%= it.t('common.bookTable') %></a>
+</section>

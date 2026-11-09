@@ -1,0 +1,19 @@
+{
+  "nom": "Ti Mango",
+  "adresse": { "rue": "12 rue de la Plage", "codePostal": "97180", "ville": "Sainte-Anne", "region": "Guadeloupe", "pays": "FR" },
+  "telephone": "0590 90 24 68",
+  "telephoneE164": "+590590902468",
+  "email": "contact@timango-gp.example",
+  "capacite": 42,
+  "horaires": {
+    "_note": "Jours ISO : 1 = lundi … 7 = dimanche. null = fermé.",
+    "1": null,
+    "2": ["11:30", "22:00"],
+    "3": ["11:30", "22:00"],
+    "4": ["11:30", "22:00"],
+    "5": ["11:30", "22:00"],
+    "6": ["11:30", "22:00"],
+    "7": ["11:30", "22:00"]
+  },
+  "carteOsm": "https://www.openstreetmap.org/search?query=12%20rue%20de%20la%20Plage%2C%2097180%20Sainte-Anne%2C%20Guadeloupe"
+}

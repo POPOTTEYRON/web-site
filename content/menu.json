@@ -1,0 +1,55 @@
+{
+  "_note": "Prix en euros TTC. 'description' et 'allergenes' : exemples à valider par le restaurateur (aValider: true). description null = à compléter.",
+  "aValider": true,
+  "categories": [
+    {
+      "id": "entrees",
+      "titre": { "fr": "Entrées", "en": "Starters" },
+      "plats": [
+        { "nom": { "fr": "Accras maison", "en": "Homemade accras" },
+          "description": { "fr": "Beignets de morue aux herbes, sauce chien.", "en": "Salt-cod fritters with herbs, Creole 'sauce chien'." },
+          "prix": 8, "allergenes": ["poisson", "gluten", "oeufs"] },
+        { "nom": { "fr": "Tartare des îles", "en": "Island tartare" },
+          "description": { "fr": "Poisson cru du jour, citron vert, piment doux.", "en": "Raw catch of the day, lime, mild pepper." },
+          "prix": 11, "allergenes": ["poisson"] }
+      ]
+    },
+    {
+      "id": "plats",
+      "titre": { "fr": "Plats", "en": "Mains" },
+      "plats": [
+        { "nom": { "fr": "Poisson grillé du jour", "en": "Grilled fish of the day" },
+          "description": { "fr": "Selon l'arrivage.", "en": "Depending on the day's catch." },
+          "prix": 22, "allergenes": ["poisson"] },
+        { "nom": { "fr": "Colombo de poulet", "en": "Chicken colombo" },
+          "description": { "fr": "Poulet mijoté aux épices colombo, riz.", "en": "Chicken simmered in colombo spices (Caribbean curry), rice." },
+          "prix": 18, "allergenes": [] },
+        { "nom": { "fr": "Langouste grillée", "en": "Grilled spiny lobster" },
+          "description": null,
+          "prix": 29, "allergenes": ["crustaces"] }
+      ]
+    },
+    {
+      "id": "desserts",
+      "titre": { "fr": "Desserts", "en": "Desserts" },
+      "plats": [
+        { "nom": { "fr": "Flan coco maison", "en": "Homemade coconut flan" },
+          "description": null,
+          "prix": 7, "allergenes": ["lait", "oeufs"] },
+        { "nom": { "fr": "Douceur mangue-passion", "en": "Mango & passion fruit dessert" },
+          "description": null,
+          "prix": 8, "allergenes": [] }
+      ]
+    },
+    {
+      "id": "boissons",
+      "titre": { "fr": "Boissons", "en": "Drinks" },
+      "plats": [
+        { "nom": { "fr": "Jus de fruits frais", "en": "Fresh fruit juice" }, "description": null, "prix": 5, "allergenes": [] },
+        { "nom": { "fr": "Cocktail maison sans alcool", "en": "Homemade alcohol-free cocktail" }, "description": null, "prix": 7, "allergenes": [] },
+        { "nom": { "fr": "Eau", "en": "Water" }, "description": null, "prix": 3, "allergenes": [] },
+        { "nom": { "fr": "Cocktail signature", "en": "Signature cocktail" }, "description": null, "prix": 10, "allergenes": [], "alcool": true }
+      ]
+    }
+  ]
+}

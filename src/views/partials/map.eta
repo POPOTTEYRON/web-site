@@ -1,0 +1,4 @@
+<div class="map">
+  <%~ include('/partials/ph', { ...it, label: it.t('common.mapPlaceholder'), cls: 'map__ph' }) %>
+  <p class="map__note"><%= it.t('contact.mapNote') %> <a href="<%= it.restaurant.carteOsm %>" rel="noopener"><%= it.t('common.openMap') %></a></p>
+</div>

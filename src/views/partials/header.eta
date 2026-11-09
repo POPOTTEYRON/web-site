@@ -1,0 +1,21 @@
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="wordmark" href="<%= it.url('home') %>"<% if (it.page === 'home') { %> aria-current="page"<% } %>>TI MANGO</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-label-open="<%= it.t('nav.open') %>" data-label-close="<%= it.t('nav.close') %>">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5h16M2 10h16M2 15h16"/></svg>
+      <span class="nav-toggle__label"><%= it.t('nav.open') %></span>
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="<%= it.t('nav.label') %>">
+      <ul class="site-nav__list">
+        <% for (const key of ['menu', 'restaurant', 'contact']) { %>
+        <li><a href="<%= it.url(key) %>"<% if (it.page === key) { %> aria-current="page"<% } %>><%= it.t('nav.' + key) %></a></li>
+        <% } %>
+      </ul>
+      <a class="lang-switch" href="<%= it.altUrl %>" hreflang="<%= it.altLang %>" lang="<%= it.altLang %>" title="<%= it.t('nav.switchTo') %>">
+        <span class="visually-hidden"><%= it.t('nav.switchTo') %></span><span aria-hidden="true"><%= it.altLang.toUpperCase() %></span>
+      </a>
+      <a class="btn btn--primary site-nav__cta" href="<%= it.url('book') %>"<% if (it.page === 'book') { %> aria-current="page"<% } %>><%= it.t('nav.book') %></a>
+    </nav>
+  </div>
+  <div class="madras" aria-hidden="true"></div>
+</header>

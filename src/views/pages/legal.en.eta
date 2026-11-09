@@ -1,0 +1,18 @@
+<% layout('/layouts/base', { title: it.t('legal.title') }) %>
+<article class="wrap wrap--narrow prose">
+  <h1 class="h1"><%= it.t('legal.title') %></h1>
+  <p class="todo">Draft text. Items in square brackets must be completed by the business, and the whole text reviewed by a professional before going live. The French version prevails.</p>
+  <h2>Publisher</h2>
+  <p>Ti Mango — [legal form, share capital]<br>12 rue de la Plage, 97180 Sainte-Anne, Guadeloupe<br>
+  [RCS / SIRET] · [VAT number, if applicable]<br>
+  Phone: <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a> · Email: <a href="mailto:<%= it.restaurant.email %>"><%= it.restaurant.email %></a><br>
+  Publication director: [name]</p>
+  <h2>Hosting</h2>
+  <p>[Hosting provider's name, address, phone]</p>
+  <h2>Intellectual property</h2>
+  <p>The texts, photographs and graphic elements of this website belong to Ti Mango or their respective authors unless stated otherwise. Reproduction without permission is prohibited.</p>
+  <h2>Credits</h2>
+  <p>Fraunces and Instrument Sans fonts, under the SIL Open Font License 1.1.</p>
+  <h2>Personal data</h2>
+  <p>See the <a href="<%= it.url('privacy') %>">privacy policy</a>.</p>
+</article>

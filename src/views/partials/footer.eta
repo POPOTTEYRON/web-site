@@ -1,0 +1,21 @@
+<div class="madras" aria-hidden="true"></div>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__col">
+      <p class="wordmark wordmark--light">TI MANGO</p>
+      <address>
+        <%= it.restaurant.adresse.rue %>, <%= it.restaurant.adresse.codePostal %> <%= it.restaurant.adresse.ville %><br>
+        <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a><br>
+        <a href="mailto:<%= it.restaurant.email %>"><%= it.restaurant.email %></a>
+      </address>
+    </div>
+    <div class="site-footer__col">
+      <p><%= it.t('common.hoursShort') %><br><%= it.t('common.closedMonday') %></p>
+    </div>
+    <div class="site-footer__col">
+      <p><a href="<%= it.url('legal') %>"><%= it.t('common.legal') %></a><br><a href="<%= it.url('privacy') %>"><%= it.t('common.privacy') %></a></p>
+      <p class="site-footer__small"><%= it.t('common.alcohol') %></p>
+      <p class="site-footer__small"><%= it.t('meta.demo') %></p>
+    </div>
+  </div>
+</footer>

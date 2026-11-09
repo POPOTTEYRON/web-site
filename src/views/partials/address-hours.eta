@@ -1,0 +1,13 @@
+<address class="address">
+  <%= it.restaurant.adresse.rue %><br><%= it.restaurant.adresse.codePostal %> <%= it.restaurant.adresse.ville %>, <%= it.restaurant.adresse.region %><br>
+  <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a><br>
+  <a href="mailto:<%= it.restaurant.email %>"><%= it.restaurant.email %></a>
+</address>
+<table class="hours">
+  <caption class="visually-hidden"><%= it.t('common.hours') %></caption>
+  <tbody>
+    <tr><th scope="row"><%= it.t('common.monday') %></th><td><%= it.t('common.closed') %></td></tr>
+    <tr><th scope="row"><%= it.t('common.tueSun') %></th><td><%= it.fmt.time('11:30') %> – <%= it.fmt.time('22:00') %></td></tr>
+  </tbody>
+</table>
+<a class="btn btn--secondary" href="<%= it.restaurant.carteOsm %>" rel="noopener"><%= it.t('common.directions') %></a>

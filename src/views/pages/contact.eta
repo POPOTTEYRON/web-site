@@ -1,0 +1,12 @@
+<% layout('/layouts/base', { title: it.t('contact.title') }) %>
+<div class="wrap page-head">
+  <h1 class="h1"><%= it.t('contact.title') %></h1>
+  <p class="lead"><%= it.t('contact.lead') %></p>
+</div>
+<section class="wrap split section section--tight">
+  <div class="split__text">
+    <%~ include('/partials/address-hours', it) %>
+    <p class="muted"><%= it.t('common.takeaway') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.t('common.takeawayCta') %> <%= it.restaurant.telephone %></a></p>
+  </div>
+  <%~ include('/partials/map', it) %>
+</section>

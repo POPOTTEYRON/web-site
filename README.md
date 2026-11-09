@@ -34,12 +34,21 @@ npm run dev                   # http://localhost:3000
 Les tests utilisent `.env.test` (même format que `.env.example`, base `timango_test`).
 
 ```bash
-npm test
+npm test            # unitaires + intégration
+npm run test:e2e    # navigateur (Playwright/Chromium) : mobile, tablette, ordinateur
 ```
 
 ## Variables d'environnement
 
 Voir `.env.example`. `MAIL_TRANSPORT=file` (par défaut) écrit les emails dans `var/mail/` au lieu de les envoyer.
+
+## Modifier le contenu
+
+- **Carte et prix** : `content/menu.json` (noms FR/EN, description, prix en euros, allergènes).
+- **Adresse, téléphone, horaires** : `content/restaurant.json`.
+- **Textes de l'interface** : `src/i18n/fr.json` et `src/i18n/en.json` (mêmes clés dans les deux fichiers, vérifié par les tests).
+
+Redémarrer le serveur après modification.
 
 ## Arborescence
 

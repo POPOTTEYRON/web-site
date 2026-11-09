@@ -1,0 +1,160 @@
+{
+  "meta": {
+    "siteDescription": "Ti Mango, contemporary Creole restaurant in Sainte-Anne, Guadeloupe: homemade cooking with fresh, local produce. Menu, opening hours and online booking.",
+    "demo": "Demo website — fictional business"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "restaurant": "The restaurant",
+    "contact": "Getting here",
+    "book": "Book",
+    "open": "Menu",
+    "close": "Close",
+    "lang": "Language",
+    "switchTo": "Version française"
+  },
+  "status": {
+    "openNow": "Open now",
+    "openToday": "Open today",
+    "closedNow": "Closed now",
+    "closedToday": "Closed today",
+    "reopens": "reopens Tuesday at 11:30am"
+  },
+  "common": {
+    "bookTable": "Book a table",
+    "seeMenu": "See the menu",
+    "fullMenu": "Full menu",
+    "call": "Call",
+    "directions": "Directions",
+    "address": "Address",
+    "hours": "Opening hours",
+    "phone": "Phone",
+    "email": "Email",
+    "monday": "Monday",
+    "tueSun": "Tuesday – Sunday",
+    "closed": "Closed",
+    "hoursLine": "Tuesday to Sunday, 11:30am – 10pm · closed on Mondays",
+    "hoursShort": "Tue – Sun · 11:30am – 10pm",
+    "closedMonday": "Closed on Mondays",
+    "takeaway": "Takeaway?",
+    "takeawayCta": "Order by phone on",
+    "tempPhoto": "Temporary illustration",
+    "toComplete": "To be completed",
+    "alcohol": "L'abus d'alcool est dangereux pour la santé, à consommer avec modération. (Alcohol abuse is dangerous for your health; drink responsibly.)",
+    "legal": "Legal notice",
+    "privacy": "Privacy",
+    "mapPlaceholder": "Map",
+    "openMap": "Open the map in OpenStreetMap"
+  },
+  "home": {
+    "title": "Contemporary Creole restaurant in Sainte-Anne",
+    "eyebrow": "Creole restaurant · Sainte-Anne, Guadeloupe",
+    "h1": "Creole cooking, revisited.",
+    "lead": "Homemade cooking rooted in traditional Caribbean recipes and fresh produce from the island, carefully served.",
+    "heroPhoto": "signature dish (photo to be supplied)",
+    "infoLabel": "Practical information",
+    "menuTitle": "From the menu",
+    "restaurantTitle": "The restaurant",
+    "restaurantText": "Ti Mango takes a modern approach to traditional Caribbean cooking: everything is made in-house from fresh, local produce, and every plate is carefully presented.",
+    "restaurantMore": "Discover the restaurant and gallery",
+    "bookTitle": "Book your table",
+    "bookText": "Online, in a minute. For groups of more than 8, please call us.",
+    "findUs": "Find us"
+  },
+  "menu": {
+    "title": "Menu",
+    "intro": "Homemade cooking, fresh and local produce. Prices in euros, service included.",
+    "categories": "Menu categories",
+    "allergens": "Allergens",
+    "noAllergen": "None of the 14 regulated allergens declared",
+    "descToComplete": "Description to be completed",
+    "toValidate": "Descriptions and allergens are examples pending the restaurant's approval. If you have an allergy, please tell our staff.",
+    "allergenNames": {
+      "poisson": "fish",
+      "gluten": "gluten",
+      "oeufs": "eggs",
+      "crustaces": "crustaceans",
+      "lait": "milk"
+    }
+  },
+  "restaurant": {
+    "title": "The restaurant",
+    "lead": "Ti Mango revisits traditional Caribbean cooking with a modern approach, careful presentation and fresh produce.",
+    "conceptTitle": "The idea",
+    "concept": "Creole recipes are the starting point. Everything is cooked on site, from fresh and, wherever possible, local produce.",
+    "placeTitle": "The place",
+    "place": "42 seats, at 12 rue de la Plage in Sainte-Anne.",
+    "storyTodo": "The restaurant's story, the chef, where the produce comes from.",
+    "galleryTitle": "Gallery",
+    "galleryNote": "Photographs of the restaurant will replace these temporary illustrations.",
+    "gallery": [
+      "Signature dish",
+      "The dining room",
+      "The terrace",
+      "Catch of the day",
+      "Desserts",
+      "In the kitchen"
+    ]
+  },
+  "book": {
+    "title": "Book a table",
+    "lead": "Choose the number of guests and the date, then your arrival time.",
+    "step1": "1. Number of guests",
+    "step2": "2. Date",
+    "step3": "3. Arrival time",
+    "step4": "4. Your details",
+    "people": "{n}",
+    "groupCall": "More than 8 guests? Call us on",
+    "today": "Today",
+    "closed": "closed",
+    "otherDate": "Other date",
+    "showSlots": "Show available times",
+    "noSlots": "No more times are available on this date. Please choose another day or call us.",
+    "slotsNote": "A meal takes about 1 hour 30 minutes.",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "note": "Note (optional)",
+    "notePlaceholder": "Allergy, high chair, special occasion…",
+    "consent": "I agree that this information may be used to manage my booking.",
+    "privacyLink": "Privacy policy",
+    "submit": "Confirm booking",
+    "summary": "Summary",
+    "errors": {
+      "invalid": "Invalid date.",
+      "past": "This date has passed.",
+      "too_far": "Bookings open up to 60 days ahead.",
+      "closed": "The restaurant is closed that day (closed on Mondays).",
+      "party": "Choose between 1 and 8 guests.",
+      "required": "This field is required.",
+      "email": "Invalid email address (e.g. name@domain.com).",
+      "phone": "Invalid phone number.",
+      "slot": "Choose an arrival time.",
+      "consent": "Your consent is needed to record the booking.",
+      "summary": "The form has errors. Please correct the highlighted fields."
+    },
+    "unavailableTitle": "Online booking coming soon",
+    "unavailableText": "Saving bookings is not yet enabled on this demo website. No booking has been made. To book, please call us on"
+  },
+  "contact": {
+    "title": "Getting here",
+    "lead": "In the heart of Sainte-Anne, a short walk from the beach.",
+    "writeUs": "Email us",
+    "mapNote": "The interactive map is not loaded automatically, so that no data is sent to a third party without your consent."
+  },
+  "legal": {
+    "title": "Legal notice"
+  },
+  "privacy": {
+    "title": "Privacy policy"
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundText": "This page does not exist or has moved.",
+    "serverTitle": "Something went wrong",
+    "serverText": "The problem is on our side. Please try again in a moment or call us.",
+    "backHome": "Back to home page"
+  }
+}

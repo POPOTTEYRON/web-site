@@ -1,0 +1,27 @@
+<% layout('/layouts/base', { title: it.t('menu.title') }) %>
+<div class="wrap page-head">
+  <h1 class="h1"><%= it.t('menu.title') %></h1>
+  <p class="lead"><%= it.t('menu.intro') %></p>
+</div>
+<div class="wrap menu" data-tabs>
+  <nav class="tabs" aria-label="<%= it.t('menu.categories') %>">
+    <ul class="tabs__list" data-tablist>
+      <% for (const c of it.menu.categories) { %>
+      <li><a class="tabs__tab" href="#<%= c.id %>" data-tab="<%= c.id %>"><%= c.titre[it.lang] %></a></li>
+      <% } %>
+    </ul>
+  </nav>
+  <% for (const c of it.menu.categories) { %>
+  <section class="menu__panel" id="<%= c.id %>" aria-labelledby="h-<%= c.id %>" data-panel="<%= c.id %>">
+    <h2 class="h2" id="h-<%= c.id %>"><%= c.titre[it.lang] %></h2>
+    <ul class="dish-list">
+      <% for (const dish of c.plats) { %><%~ include('/partials/dish', { ...it, dish, showAllergens: true }) %><% } %>
+    </ul>
+  </section>
+  <% } %>
+  <% if (it.menu.aValider) { %><p class="todo"><%= it.t('menu.toValidate') %></p><% } %>
+  <div class="menu__cta">
+    <a class="btn btn--primary btn--lg" href="<%= it.url('book') %>"><%= it.t('common.bookTable') %></a>
+    <p class="muted"><%= it.t('common.takeaway') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.t('common.takeawayCta') %> <%= it.restaurant.telephone %></a></p>
+  </div>
+</div>

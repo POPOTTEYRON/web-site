@@ -1,0 +1,18 @@
+<% layout('/layouts/base', { title: it.t('legal.title') }) %>
+<article class="wrap wrap--narrow prose">
+  <h1 class="h1"><%= it.t('legal.title') %></h1>
+  <p class="todo">Projet de texte. Les éléments entre crochets sont à compléter par l'exploitant et l'ensemble doit être relu par un professionnel avant la mise en ligne.</p>
+  <h2>Éditeur du site</h2>
+  <p>Ti Mango — [forme juridique, capital social]<br>12 rue de la Plage, 97180 Sainte-Anne, Guadeloupe<br>
+  [RCS / SIRET] · [numéro de TVA intracommunautaire, le cas échéant]<br>
+  Téléphone : <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a> · Email : <a href="mailto:<%= it.restaurant.email %>"><%= it.restaurant.email %></a><br>
+  Directeur ou directrice de la publication : [nom]</p>
+  <h2>Hébergement</h2>
+  <p>[Nom de l'hébergeur, adresse, téléphone]</p>
+  <h2>Propriété intellectuelle</h2>
+  <p>Les textes, photographies et éléments graphiques de ce site sont la propriété de Ti Mango ou de leurs auteurs respectifs, sauf mention contraire. Toute reproduction sans autorisation est interdite.</p>
+  <h2>Crédits</h2>
+  <p>Polices Fraunces et Instrument Sans, sous licence SIL Open Font License 1.1.</p>
+  <h2>Données personnelles</h2>
+  <p>Voir la <a href="<%= it.url('privacy') %>">politique de confidentialité</a>.</p>
+</article>

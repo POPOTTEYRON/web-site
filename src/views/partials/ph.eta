@@ -1,0 +1,3 @@
+<div class="ph <%= it.cls || '' %>" role="img" aria-label="<%= it.t('common.tempPhoto') %> : <%= it.label %>">
+  <span class="ph__label"><%= it.t('common.tempPhoto') %> — <%= it.label %></span>
+</div>

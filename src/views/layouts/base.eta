@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="<%= it.lang %>">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= it.title %> · Ti Mango</title>
+<meta name="description" content="<%= it.description || it.t('meta.siteDescription') %>">
+<% if (it.noindex) { %><meta name="robots" content="noindex"><% } %>
+<link rel="canonical" href="<%= it.canonical %>">
+<% if (it.alternates) { %>
+<link rel="alternate" hreflang="fr" href="<%= it.alternates.fr %>">
+<link rel="alternate" hreflang="en" href="<%= it.alternates.en %>">
+<link rel="alternate" hreflang="x-default" href="<%= it.alternates.fr %>">
+<% } %>
+<meta name="theme-color" content="#1F3B2D">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/site.css">
+<script src="/js/boot.js"></script>
+<script src="/js/site.js" defer></script>
+<%~ it.head || '' %>
+</head>
+<body class="page-<%= it.page || 'other' %>">
+<a class="skip-link" href="#contenu"><%= it.t('nav.skip') %></a>
+<%~ include('/partials/header', it) %>
+<main id="contenu" tabindex="-1">
+<%~ it.body %>
+</main>
+<%~ include('/partials/footer', it) %>
+<% if (it.page !== 'book') { %><%~ include('/partials/mobile-bar', it) %><% } %>
+</body>
+</html>

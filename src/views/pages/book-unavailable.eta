@@ -1,0 +1,6 @@
+<% layout('/layouts/base', { title: it.t('book.unavailableTitle'), noindex: true }) %>
+<div class="wrap wrap--narrow page-head">
+  <h1 class="h1"><%= it.t('book.unavailableTitle') %></h1>
+  <p class="notice" role="status"><%= it.t('book.unavailableText') %> <a href="tel:<%= it.restaurant.telephoneE164 %>"><%= it.restaurant.telephone %></a>.</p>
+  <p><a class="link-arrow" href="<%= it.url('home') %>"><%= it.t('errors.backHome') %></a></p>
+</div>
